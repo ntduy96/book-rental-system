@@ -1,23 +1,17 @@
 package com.chothuesach.model;
 
-import java.util.Iterator;
-
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.PrimaryKeyJoinColumn;
-
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
 import com.chothuesach.jsonview.NhanVienView;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import javax.persistence.*;
+import java.util.Iterator;
 
 @Entity
-@PrimaryKeyJoinColumn(name = "MA_NGUOI_DUNG")
+@PrimaryKeyJoinColumn(name = "MA_NHAN_VIEN")
 public class NhanVien extends NguoiDung {
 
 	private static final long serialVersionUID = 1L;
@@ -25,22 +19,22 @@ public class NhanVien extends NguoiDung {
 	@OneToMany(mappedBy = "nhanVien")
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@JsonIgnore
-	public java.util.Collection<PhieuChi> phieuChi;
+	private java.util.Collection<PhieuChi> phieuChi;
 
 	@OneToMany(mappedBy = "nhanVien")
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@JsonBackReference
-	public java.util.Collection<HoaDon> hoaDon;
+	private java.util.Collection<HoaDon> hoaDon;
 
 	@OneToMany(mappedBy = "nhanVien")
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@JsonIgnore
-	public java.util.Collection<PhieuNhapHang> phieuNhapHang;
+	private java.util.Collection<PhieuNhapHang> phieuNhapHang;
 
 	@ManyToOne
 	@JoinColumn(name = "MA_CHUC_VU")
 	@JsonView(NhanVienView.Detailed.class)
-	public ChucVu chucVu;
+    private ChucVu chucVu;
 
 	/** @pdGenerated default getter */
 	public java.util.Collection<PhieuChi> getPhieuChi() {
