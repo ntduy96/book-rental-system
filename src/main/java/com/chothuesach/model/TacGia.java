@@ -1,10 +1,12 @@
 package com.chothuesach.model;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import com.chothuesach.helper.Slugify;
 import com.chothuesach.jsonview.SachView;
 import com.chothuesach.jsonview.TacGiaView;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -46,6 +48,11 @@ public class TacGia {
 
 	public void setTenTacGia(String tenTacGia) {
 		this.tenTacGia = tenTacGia;
+	}
+
+	@PrePersist
+	protected void onCreate() {
+		slug = Slugify.toSlug(getTenTacGia());
 	}
 
 	public String getSlug() {
