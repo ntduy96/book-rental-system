@@ -2,21 +2,20 @@ package com.chothuesach.model;
 
 import java.util.Collection;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import com.chothuesach.jsonview.SachView;
 import com.chothuesach.jsonview.TacGiaView;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 public class TacGia {
 	
 	@Id
+	@GenericGenerator(name = "author_id", strategy = "com.chothuesach.generator.AuthorIdGenerator")
+	@GeneratedValue(generator = "author_id")
 	@JsonView({TacGiaView.Overview.class, SachView.Detailed.class})
 	private String maTacGia;
 	
