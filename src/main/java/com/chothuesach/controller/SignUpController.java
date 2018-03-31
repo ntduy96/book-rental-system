@@ -35,9 +35,11 @@ public class SignUpController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize("hasRole('ROLE_ANONYMOUS')")
-	@ResponseBody
 	public ModelAndView registerUserAccount(@ModelAttribute("user") @Valid NguoiDungDto nguoiDungDto,
-			BindingResult result, WebRequest request, Errors errors) {
+			BindingResult result) {
+		if (result.hasErrors()) {
+			return new ModelAndView("signup");
+		}
 		if (nguoiDungService.registerNewNguoiDung(nguoiDungDto) != null) {
 			return new ModelAndView("login");
 		}
