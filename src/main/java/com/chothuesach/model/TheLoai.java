@@ -2,10 +2,7 @@ package com.chothuesach.model;
 
 import java.util.Collection;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
@@ -20,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 public class TheLoai {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonView({SachView.Detailed.class, TheLoaiView.Overview.class})
 	public Long maTheLoai;
 	
