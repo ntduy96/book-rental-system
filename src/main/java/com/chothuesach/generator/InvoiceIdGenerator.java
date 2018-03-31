@@ -22,15 +22,15 @@ public class InvoiceIdGenerator implements IdentifierGenerator {
 	public Serializable generate(SharedSessionContractImplementor session, Object object) throws HibernateException {
 		Connection conn = session.connection();
 		String id = null;
-		String maHoaDon = new String(Hex.encode(KeyGenerators.secureRandom(12 / 2).generateKey()));
+		String maHoaDon = new String(Hex.encode(KeyGenerators.secureRandom(16 / 2).generateKey()));
 		PreparedStatement p;
 		try {
-			p = conn.prepareStatement("SELECT TEN_SACH FROM SACH WHERE MA_SACH = ?");
+			p = conn.prepareStatement("SELECT MA_HOA_DON FROM HOA_DON WHERE MA_HOA_DON = ?");
 			p.setString(1, maHoaDon);
 			ResultSet rs = p.executeQuery();
 			if (!rs.next()) {
 				if (logger.isDebugEnabled())
-					logger.debug("new book id is generated:" + maHoaDon);
+					logger.debug("new invoice id is generated:" + maHoaDon);
 				return maHoaDon;
 			}
 		} catch (SQLException e) {
@@ -38,13 +38,8 @@ public class InvoiceIdGenerator implements IdentifierGenerator {
 			e.printStackTrace();
 		}
 		if (logger.isDebugEnabled())
-			logger.debug("new book id is generated:" + id);
+			logger.debug("new invoice id is generated:" + id);
 		return id;
-	}
-	
-	public static void main(String[] agrs) {
-		String maHoaDon = new String(Hex.encode(KeyGenerators.secureRandom(16 / 2).generateKey()));
-		System.out.println(maHoaDon);
 	}
 	
 }
