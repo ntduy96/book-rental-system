@@ -5,6 +5,7 @@ import java.util.Collection;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import com.chothuesach.helper.Slugify;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -36,6 +37,11 @@ public class TheLoai {
 	@JsonView(TheLoaiView.Detailed.class)
 	@JsonBackReference
 	private Collection<Sach> sachThuocTheLoai;
+
+	@PrePersist
+	protected void onCreate() {
+		slug = Slugify.toSlug(getTenTheLoai());
+	}
 
 	public Long getMaTheLoai() {
 		return maTheLoai;
