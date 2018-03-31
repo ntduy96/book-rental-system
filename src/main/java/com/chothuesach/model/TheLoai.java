@@ -19,11 +19,15 @@ public class TheLoai {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonView({SachView.Detailed.class, TheLoaiView.Overview.class})
-	public Long maTheLoai;
+	private Long maTheLoai;
 	
 	@NotNull
 	@JsonView({SachView.Detailed.class, TheLoaiView.Overview.class})
-	public String tenTheLoai;
+	private String tenTheLoai;
+
+	@NotNull
+	@JsonView({SachView.Detailed.class, TheLoaiView.Overview.class})
+	private String slug;
 
 	@ManyToMany(fetch=FetchType.LAZY,
 		mappedBy="sachThuocTheLoai"
@@ -31,7 +35,7 @@ public class TheLoai {
 	@Cascade({CascadeType.SAVE_UPDATE})
 	@JsonView(TheLoaiView.Detailed.class)
 	@JsonBackReference
-	public Collection<Sach> sachThuocTheLoai;
+	private Collection<Sach> sachThuocTheLoai;
 
 	public Long getMaTheLoai() {
 		return maTheLoai;
@@ -47,6 +51,14 @@ public class TheLoai {
 
 	public void setTenTheLoai(String tenTheLoai) {
 		this.tenTheLoai = tenTheLoai;
+	}
+
+	public String getSlug() {
+		return slug;
+	}
+
+	public void setSlug(String slug) {
+		this.slug = slug;
 	}
 
 	public Collection<Sach> getSachThuocTheLoai() {
