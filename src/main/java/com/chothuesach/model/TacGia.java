@@ -18,16 +18,20 @@ public class TacGia {
 	
 	@Id
 	@JsonView({TacGiaView.Overview.class, SachView.Detailed.class})
-	public String maTacGia;
+	private String maTacGia;
 	
 	@NotNull
 	@JsonView({TacGiaView.Overview.class, SachView.Detailed.class})
-	public String tenTacGia;
+	private String tenTacGia;
+
+	@NotNull
+	@JsonView({TacGiaView.Overview.class, SachView.Detailed.class})
+	private String slug;
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
 			CascadeType.MERGE }, mappedBy = "sachCuaTacGia")
 	@JsonView(TacGiaView.Detailed.class)
-	public Collection<Sach> sachCuaTacGia;
+	private Collection<Sach> sachCuaTacGia;
 
 	public String getMaTacGia() {
 		return maTacGia;
@@ -43,6 +47,14 @@ public class TacGia {
 
 	public void setTenTacGia(String tenTacGia) {
 		this.tenTacGia = tenTacGia;
+	}
+
+	public String getSlug() {
+		return slug;
+	}
+
+	public void setSlug(String slug) {
+		this.slug = slug;
 	}
 
 	public Collection<Sach> getSachCuaTacGia() {
