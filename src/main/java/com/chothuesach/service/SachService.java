@@ -1,17 +1,5 @@
 package com.chothuesach.service;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-
 import com.chothuesach.dto.SachDto;
 import com.chothuesach.exception.BookTitleExistsException;
 import com.chothuesach.model.DonGiaBan;
@@ -21,6 +9,15 @@ import com.chothuesach.model.TheLoai;
 import com.chothuesach.repository.SachRepository;
 import com.chothuesach.repository.TacGiaRepository;
 import com.chothuesach.repository.TheLoaiRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class SachService {
@@ -38,6 +35,11 @@ public class SachService {
 //		Sort sort = new Sort(Sort.Direction.DESC, "ngayTao");
 //		PageRequest page = PageRequest.of(pageNumber - 1, 5);
 		return sachRepository.findAll(pageable);
+	}
+
+	public List<Sach> getSachByTheLoai(String theLoaiSlug) {
+		TheLoai theLoai = theLoaiRepository.getBySlug(theLoaiSlug);
+		return sachRepository.findBySachThuocTheLoai(theLoai);
 	}
 	
 	public List<Sach> searchByTenSach(String tenSach, Pageable pageable) {
