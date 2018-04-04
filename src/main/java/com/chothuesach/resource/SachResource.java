@@ -4,12 +4,15 @@ import com.chothuesach.dto.SachDto;
 import com.chothuesach.jsonview.SachView;
 import com.chothuesach.model.DonGiaBan;
 import com.chothuesach.model.Sach;
+import com.chothuesach.repository.DonGiaBanRepository;
 import com.chothuesach.service.SachService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,11 +20,14 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
-@RequestMapping("/resource/sach")
+@RequestMapping("/api/sach")
 public class SachResource {
 	
 	@Autowired
 	private SachService sachService;
+
+	@Autowired
+	private DonGiaBanRepository donGiaBanRepository;
 	
 	@GetMapping
 	@JsonView(SachView.Overview.class)
@@ -88,6 +94,22 @@ public class SachResource {
 	@JsonView(SachView.CurrentPrice.class)
 	public DonGiaBan getCurrentPrice(@PathVariable String slug) {
 		return sachService.getLatestPrice(slug);
+	}
+
+	@PostMapping("/{slug}/prices")
+	public ResponseEntity updatePrice(@PathVariable String slug, @RequestParam double newPrice) {
+		Sach sach = sachService.getOneBySlug(slug);
+		HashMap<String, String> response = new HashMap<>();
+		if (sach == null) {
+			response.put("error", "sach not found!");
+			return new ResponseEntity(response, HttpStatus.NOT_FOUND);
+		}
+		DonGiaBan newDonGiaBan = new DonGiaBan();
+		newDonGiaBan.setDonGia(newPrice);
+		newDonGiaBan.setSach(sach);
+		donGiaBanRepository.save(newDonGiaBan);
+		response.put("updated", "ok");
+		return new ResponseEntity(response, HttpStatus.OK);
 	}
 
 }
