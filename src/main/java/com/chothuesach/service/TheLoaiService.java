@@ -21,4 +21,10 @@ public class TheLoaiService {
         return theLoaiRepository.getBySlug(slug);
     }
 
+    public void addNewTheLoai(String tenTheLoai) {
+        TheLoai newTheLoai = new TheLoai();
+        newTheLoai.setTenTheLoai(tenTheLoai);
+        theLoaiRepository.save(newTheLoai);
+    }
+
 }
