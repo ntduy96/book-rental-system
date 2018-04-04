@@ -1,15 +1,8 @@
 package com.chothuesach.model;
 
-import java.util.Date;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Entity
 public class PhieuChi {
@@ -26,10 +19,6 @@ public class PhieuChi {
 	@ManyToOne
 	@JoinColumn(name = "MA_NHAN_VIEN")
 	public NhanVien nhanVien;
-
-	@ManyToOne
-	@JoinColumn(name = "MA_PHIEU_NHAP")
-	public PhieuNhapHang phieuNhapHang;
 
 	@PrePersist
 	protected void onCreate() {
