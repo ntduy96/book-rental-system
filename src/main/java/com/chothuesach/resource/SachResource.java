@@ -2,6 +2,7 @@ package com.chothuesach.resource;
 
 import com.chothuesach.dto.SachDto;
 import com.chothuesach.jsonview.SachView;
+import com.chothuesach.model.DonGiaBan;
 import com.chothuesach.model.Sach;
 import com.chothuesach.service.SachService;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -75,6 +76,18 @@ public class SachResource {
 	@JsonView(SachView.Overview.class)
 	public List<Sach> getSachByTheLoai(@PathVariable String theLoai) {
 		return sachService.getSachByTheLoai(theLoai);
+	}
+
+	@GetMapping("/{slug}/prices")
+	@JsonView(SachView.CurrentPrice.class)
+	public List<DonGiaBan> getPrices(@PathVariable String slug) {
+		return (List<DonGiaBan>) sachService.getOneBySlug(slug).getDonGiaBan();
+	}
+
+	@GetMapping("/{slug}/prices/latest")
+	@JsonView(SachView.CurrentPrice.class)
+	public DonGiaBan getCurrentPrice(@PathVariable String slug) {
+		return sachService.getLatestPrice(slug);
 	}
 
 }

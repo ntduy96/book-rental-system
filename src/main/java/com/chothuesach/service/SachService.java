@@ -6,6 +6,7 @@ import com.chothuesach.model.DonGiaBan;
 import com.chothuesach.model.Sach;
 import com.chothuesach.model.TacGia;
 import com.chothuesach.model.TheLoai;
+import com.chothuesach.repository.DonGiaBanRepository;
 import com.chothuesach.repository.SachRepository;
 import com.chothuesach.repository.TacGiaRepository;
 import com.chothuesach.repository.TheLoaiRepository;
@@ -30,6 +31,9 @@ public class SachService {
 	
 	@Autowired
 	private TacGiaRepository tacGiaRepository;
+
+	@Autowired
+    private DonGiaBanRepository donGiaBanRepository;
 	
 	public Page<Sach> getAllSach(Pageable pageable) {
 //		Sort sort = new Sort(Sort.Direction.DESC, "ngayTao");
@@ -82,6 +86,10 @@ public class SachService {
 	public void changeSoLuongSach(String slug, long newSoLuong) {
 		sachRepository.updateSoLuongSachByMaSach(newSoLuong, slug);
 	}
+
+	public DonGiaBan getLatestPrice(String slug) {
+	    return donGiaBanRepository.getLatestDonGiaBanOfSach(sachRepository.findOneBySlug(slug).getMaSach());
+    }
 	
 	public void deleteSachByMaSach(String maSach) {
 		sachRepository.deleteByMaSach(maSach);
