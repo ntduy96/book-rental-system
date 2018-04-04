@@ -21,27 +21,22 @@ public class NguoiDungController {
 
 	@PostMapping("/check")
     public HashMap<String, Boolean> checkExist(@RequestParam(required = false) String tenNguoiDung, @RequestParam(required = false) String email, @RequestParam(required = false) String soCmnd) {
+        HashMap<String, Boolean> response = new HashMap<>();
 
 	    if (tenNguoiDung != null) {
-	        return addJsonField(nguoiDungService.tenNguoiDungExist(tenNguoiDung));
+	        response.put("tenNguoiDungExist", nguoiDungService.tenNguoiDungExist(tenNguoiDung));
         }
 
         if (email != null) {
-            return addJsonField(nguoiDungService.emailExist(email));
+            response.put("emailExist", nguoiDungService.emailExist(email));
         }
 
         if (soCmnd != null) {
-            return addJsonField(nguoiDungService.soCmndExist(soCmnd));
+            response.put("soCmndExist", nguoiDungService.soCmndExist(soCmnd));
         }
 
-        return null;
+        return response;
 
-    }
-
-    private HashMap<String, Boolean> addJsonField(boolean result) {
-	    HashMap<String, Boolean> json = new HashMap<>();
-	    json.put("exist", result);
-	    return json;
     }
 	
 }
