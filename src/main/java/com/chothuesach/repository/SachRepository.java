@@ -1,18 +1,15 @@
 package com.chothuesach.repository;
 
-import java.util.List;
-
-import javax.transaction.Transactional;
-
+import com.chothuesach.model.Sach;
+import com.chothuesach.model.TheLoai;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Repository;
 
-import com.chothuesach.model.Sach;
+import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 public interface SachRepository extends JpaRepository<Sach, String> {
@@ -22,6 +19,8 @@ public interface SachRepository extends JpaRepository<Sach, String> {
 	Sach findOneBySlug(String slug);
 
 	List<Sach> findByTenSachContains(String tenSach, Pageable pageable);
+
+	List<Sach> findBySachThuocTheLoai(TheLoai theLoai);
 
 	@Modifying
 	@Query("UPDATE Sach SET TEN_SACH = ?1 WHERE MA_SACH = ?2")
