@@ -1,26 +1,16 @@
 package com.chothuesach.model;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-
+import com.chothuesach.jsonview.HoaDonView;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-import com.chothuesach.jsonview.HoaDonView;
-import com.fasterxml.jackson.annotation.JsonView;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
 
 @Entity
 public class HoaDon {
@@ -29,34 +19,34 @@ public class HoaDon {
 	@GenericGenerator(name = "invoice_id", strategy = "com.chothuesach.generator.InvoiceIdGenerator")
 	@GeneratedValue(generator = "invoice_id")
 	@JsonView(HoaDonView.Overview.class)
-	public String maHoaDon;
+	private String maHoaDon;
 
 	@NotNull
 	@JsonView(HoaDonView.Detailed.class)
-	public double giaTri;
+	private double giaTri;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@JsonView(HoaDonView.Detailed.class)
-	public Date ngayLapHoaDon;
+	private Date ngayLapHoaDon;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@JsonView(HoaDonView.Detailed.class)
-	public Date ngayThanhToan;
+	private Date ngayThanhToan;
 
 	@OneToMany(mappedBy = "hoaDon")
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@JsonView(HoaDonView.Detailed.class)
-	public Collection<ChiTietHoaDon> chiTietHoaDon;
+	private Collection<ChiTietHoaDon> chiTietHoaDon;
 
 	@ManyToOne(/*fetch=FetchType.LAZY*/)
 	@JoinColumn(name = "MA_NHAN_VIEN")
 	@JsonView(HoaDonView.Detailed.class)
-	public NhanVien nhanVien;
+	private NhanVien nhanVien;
 
 	@ManyToOne(/*fetch=FetchType.LAZY*/)
 	@JoinColumn(name = "MA_KHACH_HANG")
 	@JsonView(HoaDonView.Detailed.class)
-	public NguoiDung khachHang;
+	private NguoiDung khachHang;
 
 	@PrePersist
 	protected void onCreate() {
@@ -169,4 +159,35 @@ public class HoaDon {
 		}
 	}
 
+	public String getMaHoaDon() {
+		return maHoaDon;
+	}
+
+	public void setMaHoaDon(String maHoaDon) {
+		this.maHoaDon = maHoaDon;
+	}
+
+	public double getGiaTri() {
+		return giaTri;
+	}
+
+	public void setGiaTri(double giaTri) {
+		this.giaTri = giaTri;
+	}
+
+	public Date getNgayLapHoaDon() {
+		return ngayLapHoaDon;
+	}
+
+	public void setNgayLapHoaDon(Date ngayLapHoaDon) {
+		this.ngayLapHoaDon = ngayLapHoaDon;
+	}
+
+	public Date getNgayThanhToan() {
+		return ngayThanhToan;
+	}
+
+	public void setNgayThanhToan(Date ngayThanhToan) {
+		this.ngayThanhToan = ngayThanhToan;
+	}
 }
