@@ -1,30 +1,5 @@
 package com.chothuesach.model;
 
-import java.util.Collection;
-import java.util.Date;
-
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.PrePersist;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
 import com.chothuesach.helper.Slugify;
 import com.chothuesach.jsonview.HoaDonView;
 import com.chothuesach.jsonview.SachView;
@@ -34,6 +9,15 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
+
+import javax.persistence.Entity;
+import javax.persistence.*;
+import javax.persistence.OrderBy;
+import javax.validation.constraints.NotNull;
+import java.util.Collection;
+import java.util.Date;
 
 @Entity
 public class Sach {
@@ -49,7 +33,7 @@ public class Sach {
 	private String tenSach;
 	
 	@NotNull
-	@JsonView(SachView.Overview.class)
+	@JsonView({SachView.Overview.class, HoaDonView.Detailed.class})
 	private String slug;
 	
 	@JsonView(SachView.Detailed.class)
