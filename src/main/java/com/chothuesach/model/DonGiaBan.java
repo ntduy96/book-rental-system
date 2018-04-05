@@ -1,15 +1,18 @@
 package com.chothuesach.model;
 
+import com.chothuesach.jsonview.SachView;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import com.chothuesach.jsonview.SachView;
-import com.fasterxml.jackson.annotation.JsonView;
+import java.io.Serializable;
 
 @Entity
-public class DonGiaBan {
+public class DonGiaBan implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	
 	@EmbeddedId
 	private DonGiaBanId donGiaBanId;

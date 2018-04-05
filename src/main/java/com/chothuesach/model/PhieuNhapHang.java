@@ -1,27 +1,21 @@
 package com.chothuesach.model;
 
+import com.chothuesach.jsonview.PhieuNhapHangView;
+import com.fasterxml.jackson.annotation.JsonView;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
-import com.chothuesach.jsonview.PhieuNhapHangView;
-import com.fasterxml.jackson.annotation.JsonView;
-
 @Entity
-public class PhieuNhapHang {
+public class PhieuNhapHang implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@JsonView(PhieuNhapHangView.Overview.class)

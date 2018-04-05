@@ -8,12 +8,15 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
 @Entity
-public class HoaDon {
+public class HoaDon implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GenericGenerator(name = "invoice_id", strategy = "com.chothuesach.generator.InvoiceIdGenerator")

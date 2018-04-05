@@ -1,17 +1,20 @@
 package com.chothuesach.model;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
 import com.chothuesach.jsonview.HoaDonView;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
 
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import java.io.Serializable;
+
 @Entity
-public class ChiTietHoaDon {
+public class ChiTietHoaDon implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	
 	@EmbeddedId
 	@JsonIgnore

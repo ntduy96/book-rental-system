@@ -1,20 +1,21 @@
 package com.chothuesach.model;
 
-import java.util.Iterator;
+import com.chothuesach.jsonview.SachView;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
-import com.chothuesach.jsonview.SachView;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
+import java.io.Serializable;
+import java.util.Iterator;
 
 @Entity
-public class ThoiDiem {
+public class ThoiDiem implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@JsonView(SachView.Detailed.class)

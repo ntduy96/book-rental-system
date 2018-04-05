@@ -1,15 +1,18 @@
 package com.chothuesach.model;
 
+import com.chothuesach.jsonview.PhieuNhapHangView;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import com.chothuesach.jsonview.PhieuNhapHangView;
-import com.fasterxml.jackson.annotation.JsonView;
+import java.io.Serializable;
 
 @Entity
-public class ChiTietPhieuNhap {
+public class ChiTietPhieuNhap implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	
 	@EmbeddedId
 	private ChiTietPhieuNhapId chiTietPhieuNhapId;

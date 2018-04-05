@@ -1,19 +1,20 @@
 package com.chothuesach.model;
 
-import java.util.Collection;
-import java.util.Date;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-
 import com.chothuesach.helper.Slugify;
 import com.chothuesach.jsonview.SachView;
 import com.chothuesach.jsonview.TacGiaView;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Collection;
+
 @Entity
-public class TacGia {
+public class TacGia implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GenericGenerator(name = "author_id", strategy = "com.chothuesach.generator.AuthorIdGenerator")

@@ -1,21 +1,22 @@
 package com.chothuesach.model;
 
-import java.util.Collection;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-
 import com.chothuesach.helper.Slugify;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-
 import com.chothuesach.jsonview.SachView;
 import com.chothuesach.jsonview.TheLoaiView;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Collection;
 
 @Entity
-public class TheLoai {
+public class TheLoai implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

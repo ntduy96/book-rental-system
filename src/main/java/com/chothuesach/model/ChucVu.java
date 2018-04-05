@@ -1,21 +1,20 @@
 package com.chothuesach.model;
 
-import java.util.Collection;
-import java.util.Iterator;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
-
 import com.chothuesach.jsonview.ChucVuView;
 import com.chothuesach.jsonview.NhanVienView;
 import com.fasterxml.jackson.annotation.JsonView;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Iterator;
+
 @Entity
-public class ChucVu {
+public class ChucVu implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonView({ChucVuView.Overview.class, NhanVienView.Detailed.class})

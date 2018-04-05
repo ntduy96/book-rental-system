@@ -1,19 +1,20 @@
 package com.chothuesach.model;
 
-import java.util.Collection;
-import java.util.Iterator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Iterator;
 
 @Entity
-public class NhaPhanPhoi {
+public class NhaPhanPhoi implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	public long maNpp;

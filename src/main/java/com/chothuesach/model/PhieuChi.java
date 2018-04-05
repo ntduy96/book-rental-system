@@ -2,10 +2,13 @@ package com.chothuesach.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public class PhieuChi {
+public class PhieuChi implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	public String maPhieuChi;

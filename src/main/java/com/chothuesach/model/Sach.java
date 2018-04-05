@@ -16,11 +16,14 @@ import javax.persistence.Entity;
 import javax.persistence.*;
 import javax.persistence.OrderBy;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
 @Entity
-public class Sach {
+public class Sach implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GenericGenerator(name = "book_id", strategy = "com.chothuesach.generator.BookIdGenerator")
