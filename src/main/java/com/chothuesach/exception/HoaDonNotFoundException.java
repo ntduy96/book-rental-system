@@ -9,7 +9,7 @@ public class HoaDonNotFoundException extends RuntimeException {
     private String message = "Hoa don not found";
 
     public HoaDonNotFoundException() {
-        
+
     }
 
     public HoaDonNotFoundException(String message) {
