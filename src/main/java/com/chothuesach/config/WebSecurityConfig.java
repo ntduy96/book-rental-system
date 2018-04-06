@@ -54,6 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .antMatchers("/", "/home", "/signup", "/authority", "/user", "/resource/**", "/login**").permitAll()
                 .antMatchers("/api/nguoidung/check").permitAll()
+				.antMatchers("/manage").hasAuthority("ROLE_ADMIN")
 				.anyRequest().authenticated()
                 .and()
             .formLogin()
