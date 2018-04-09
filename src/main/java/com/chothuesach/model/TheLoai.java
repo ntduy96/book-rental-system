@@ -40,6 +40,7 @@ public class TheLoai implements Serializable {
 	private Collection<Sach> sachThuocTheLoai;
 
 	@PrePersist
+	@PreUpdate
 	protected void onCreate() {
 		slug = Slugify.toSlug(getTenTheLoai());
 	}

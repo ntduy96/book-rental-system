@@ -52,6 +52,7 @@ public class TacGia implements Serializable {
 	}
 
 	@PrePersist
+	@PreUpdate
 	protected void onCreate() {
 		slug = Slugify.toSlug(getTenTacGia());
 	}
