@@ -11,4 +11,6 @@ public interface TheLoaiRepository extends CrudRepository<TheLoai, Long> {
 
     TheLoai getBySlug(String slug);
 
+    TheLoai getByTenTheLoai(String tenTheLoai);
+
 }
