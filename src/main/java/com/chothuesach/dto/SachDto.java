@@ -1,16 +1,15 @@
 package com.chothuesach.dto;
 
-import java.util.Date;
-import java.util.Set;
+import org.hibernate.validator.constraints.URL;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
-
-import org.hibernate.validator.constraints.URL;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
+import java.util.Date;
+import java.util.Set;
 
 public class SachDto {
 
@@ -32,7 +31,7 @@ public class SachDto {
 	private Date ngayXuatBan;
 	
 	@NotEmpty(message = "Không được bỏ trống")
-	private Set<Long> theLoai;
+	private Set<String> theLoai;
 	
 	@NotEmpty(message = "Không được bỏ trống")
 	private Set<String> tacGia;
@@ -89,11 +88,11 @@ public class SachDto {
 		this.donGiaBan = donGiaBan;
 	}
 
-	public Set<Long> getTheLoai() {
+	public Set<String> getTheLoai() {
 		return theLoai;
 	}
 
-	public void setTheLoai(Set<Long> theLoai) {
+	public void setTheLoai(Set<String> theLoai) {
 		this.theLoai = theLoai;
 	}
 
