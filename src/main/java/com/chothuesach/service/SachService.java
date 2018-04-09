@@ -1,6 +1,7 @@
 package com.chothuesach.service;
 
 import com.chothuesach.dto.SachDto;
+import com.chothuesach.dto.SachUpdateDto;
 import com.chothuesach.exception.BookTitleExistsException;
 import com.chothuesach.model.DonGiaBan;
 import com.chothuesach.model.Sach;
@@ -15,8 +16,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -36,8 +37,6 @@ public class SachService {
     private DonGiaBanRepository donGiaBanRepository;
 	
 	public Page<Sach> getAllSach(Pageable pageable) {
-//		Sort sort = new Sort(Sort.Direction.DESC, "ngayTao");
-//		PageRequest page = PageRequest.of(pageNumber - 1, 5);
 		return sachRepository.findAll(pageable);
 	}
 
@@ -82,6 +81,43 @@ public class SachService {
 			return sachRepository.save(newSach);
 		}
 	}
+
+	public Sach updateSach(String slug, SachUpdateDto sachUpdateDto) {
+        if (tenSachExist(sachUpdateDto.getTenSach())) {
+            throw new BookTitleExistsException(sachUpdateDto.getTenSach());
+        } else {
+            Sach sach = sachRepository.findOneBySlug(slug);
+            String newAnhBia = sachUpdateDto.getAnhBia();
+            String newTenSach = sachUpdateDto.getTenSach();
+            Long newSoLuong = sachUpdateDto.getSoLuong();
+            Integer newSoTrang = sachUpdateDto.getSoTrang();
+            Date newNgayXuatBan = sachUpdateDto.getNgayXuatBan();
+            Set<String> newTheLoai = sachUpdateDto.getTheLoai();
+            Set<String> newTacGia = sachUpdateDto.getTacGia();
+            Double newDonGiaBan = sachUpdateDto.getDonGiaBan();
+
+            if (newAnhBia != null) {
+                sach.setAnhBia(newAnhBia);
+            }
+            if (newTenSach != null) {
+                sach.setTenSach(newTenSach);
+            }
+            if (newSoLuong != null) {
+                sach.setSoTrang(newSoTrang);
+            }
+            if (newNgayXuatBan != null) {
+                sach.setNgayXuatBan(newNgayXuatBan);
+            }
+            if (newTheLoai != null) {
+                sach.setSachThuocTheLoai(mapTheLoai(newTheLoai));
+            }
+            if (newTacGia != null) {
+                sach.setSachCuaTacGia(mapTacGia(newTacGia));
+            }
+
+            return sachRepository.save(sach);
+        }
+    }
 	
 	public void changeSoLuongSach(String slug, long newSoLuong) {
 		sachRepository.updateSoLuongSachByMaSach(newSoLuong, slug);
@@ -99,23 +135,19 @@ public class SachService {
 		sachRepository.deleteBySlug(slug);
 	}
 	
-	private Set<TheLoai> mapTheLoai(Set<Long> maTheLoais) {
-		Set<TheLoai> theLoais = new HashSet<TheLoai>();
-		Iterator<Long> maTheLoaiIterator = maTheLoais.iterator();
-		while (maTheLoaiIterator.hasNext()) {
-			Long theLoai = (Long) maTheLoaiIterator.next();
-			theLoais.add(theLoaiRepository.findById(theLoai).get());
-		}
+	private Set<TheLoai> mapTheLoai(Set<String> tenTheLoais) {
+		Set<TheLoai> theLoais = new HashSet<>();
+        for (String theLoai : tenTheLoais) {
+            theLoais.add(theLoaiRepository.getByTenTheLoai(theLoai));
+        }
 		return theLoais;
 	}
 	
-	private Set<TacGia> mapTacGia(Set<String> maTacGias) {
-		Set<TacGia> tacGias = new HashSet<TacGia>();
-		Iterator<String> maTacGiaIterator = maTacGias.iterator();
-		while (maTacGiaIterator.hasNext()) {
-			String tacGia = (String) maTacGiaIterator.next();
-			tacGias.add(tacGiaRepository.findById(tacGia).get());
-		}
+	private Set<TacGia> mapTacGia(Set<String> tenTacGias) {
+		Set<TacGia> tacGias = new HashSet<>();
+        for (String tacGia : tenTacGias) {
+            tacGias.add(tacGiaRepository.getByTenTacGia(tacGia));
+        }
 		return tacGias;
 	}
 	
