@@ -33,19 +33,17 @@ public class SachResource {
 	
 	@GetMapping
 	@JsonView(SachView.Overview.class)
-	public List<Sach> getAll(@PageableDefault(page = 0, size = 10, sort = {"ngayTao"}, direction = Sort.Direction.DESC) Pageable pageable) {
-		return sachService.searchByTenSach("", pageable);
+	public List<Sach> getAll(@RequestParam(required = false) String tenSach, @PageableDefault(page = 0, size = 10, sort = {"ngayTao"}, direction = Sort.Direction.DESC) Pageable pageable) {
+		if (tenSach != null) {
+		    return sachService.searchByTenSach(tenSach, pageable);
+        }
+	    return sachService.searchByTenSach("", pageable);
 	}
-
-	/*
-	* @todo
-	* create check valid tenSach by GET
-	* */
 	
-	@GetMapping("/search")
+	@GetMapping("/tenSach")
 	@JsonView(SachView.Overview.class)
-	public List<Sach> searchByTenSach(@RequestParam String tenSach, @PageableDefault(page = 0, size = 3) Pageable pageable) {
-		return sachService.searchByTenSach(tenSach, pageable);
+	public Sach getOneByTenSach(@RequestParam String tenSach, @PageableDefault(page = 0, size = 3) Pageable pageable) {
+		return sachService.getOneByTenSach(tenSach);
 	}
 	
 	@GetMapping("/{slug}")
