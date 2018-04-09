@@ -1,6 +1,7 @@
 package com.chothuesach.resource;
 
 import com.chothuesach.dto.SachDto;
+import com.chothuesach.dto.SachUpdateDto;
 import com.chothuesach.jsonview.SachView;
 import com.chothuesach.model.DonGiaBan;
 import com.chothuesach.model.Sach;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,6 +36,11 @@ public class SachResource {
 	public List<Sach> getAll(@PageableDefault(page = 0, size = 10, sort = {"ngayTao"}, direction = Sort.Direction.DESC) Pageable pageable) {
 		return sachService.searchByTenSach("", pageable);
 	}
+
+	/*
+	* @todo
+	* create check valid tenSach by GET
+	* */
 	
 	@GetMapping("/search")
 	@JsonView(SachView.Overview.class)
@@ -50,7 +57,7 @@ public class SachResource {
 	@PostMapping
 	public HashMap<String, String> addNewBook(@Valid SachDto sachDto) {
 		Sach sach = sachService.createNewSach(sachDto);
-		HashMap<String, String> response = new HashMap<String, String>();
+		HashMap<String, String> response = new HashMap<>();
 		if (sach != null) {
 			response.put("created", "ok");
 			response.put("maSach", sach.getMaSach());
@@ -62,18 +69,25 @@ public class SachResource {
 		}
 	}
 	
-	@PutMapping("/{slug}")
-	public HashMap<String, String> changeSoLuongSach(@PathVariable String slug, @RequestParam int newSoLuong) {
-		sachService.changeSoLuongSach(slug, newSoLuong);
-		HashMap<String, String> response = new HashMap<String, String>();
-		response.put("updated", "ok");
-		return response;
+	@PutMapping(value = "/{slug}", consumes = "application/json")
+	public ResponseEntity updateSach(@PathVariable String slug, @RequestBody @Valid SachUpdateDto sachUpdateDto, BindingResult result) {
+        if (result.hasErrors()) {
+            return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+        } else {
+            HashMap<String, String> response = new HashMap<>();
+            if (sachService.updateSach(slug, sachUpdateDto) != null) {
+                response.put("updated", "ok");
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
+            response.put("updated", "failed");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
 	}
 	
 	@DeleteMapping("/{slug}")
 	public HashMap<String, String> deleteSach(@PathVariable String slug) {
 		sachService.deleteSachBySlug(slug);
-		HashMap<String, String> response = new HashMap<String, String>();
+		HashMap<String, String> response = new HashMap<>();
 		response.put("deleted", "ok");
 		return response;
 	}
