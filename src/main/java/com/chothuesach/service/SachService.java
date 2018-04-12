@@ -9,8 +9,6 @@ import com.chothuesach.model.TacGia;
 import com.chothuesach.model.TheLoai;
 import com.chothuesach.repository.DonGiaBanRepository;
 import com.chothuesach.repository.SachRepository;
-import com.chothuesach.repository.TacGiaRepository;
-import com.chothuesach.repository.TheLoaiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,10 +26,10 @@ public class SachService {
 	private SachRepository sachRepository;
 
 	@Autowired
-	private TheLoaiRepository theLoaiRepository;
+	private TheLoaiService theLoaiService;
 	
 	@Autowired
-	private TacGiaRepository tacGiaRepository;
+	private TacGiaService tacGiaService;
 
 	@Autowired
     private DonGiaBanRepository donGiaBanRepository;
@@ -41,7 +39,7 @@ public class SachService {
 	}
 
 	public List<Sach> getSachByTheLoai(String theLoaiSlug) {
-		TheLoai theLoai = theLoaiRepository.getBySlug(theLoaiSlug);
+		TheLoai theLoai = theLoaiService.getTheLoaiBySlug(theLoaiSlug);
 		return sachRepository.findBySachThuocTheLoai(theLoai);
 	}
 	
@@ -138,7 +136,7 @@ public class SachService {
 	private Set<TheLoai> mapTheLoai(Set<String> tenTheLoais) {
 		Set<TheLoai> theLoais = new HashSet<>();
         for (String theLoai : tenTheLoais) {
-            theLoais.add(theLoaiRepository.getByTenTheLoai(theLoai));
+            theLoais.add(theLoaiService.getTheLoaiByTenTheLoai(theLoai));
         }
 		return theLoais;
 	}
@@ -146,7 +144,7 @@ public class SachService {
 	private Set<TacGia> mapTacGia(Set<String> tenTacGias) {
 		Set<TacGia> tacGias = new HashSet<>();
         for (String tacGia : tenTacGias) {
-            tacGias.add(tacGiaRepository.getByTenTacGia(tacGia));
+            tacGias.add(tacGiaService.getOneByTenTacGia(tacGia));
         }
 		return tacGias;
 	}
