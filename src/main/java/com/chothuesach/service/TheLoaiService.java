@@ -48,4 +48,9 @@ public class TheLoaiService {
         theLoaiRepository.save(theLoai);
     }
 
+    public void deleteTheLoai(String slug) {
+        TheLoai theLoai = getTheLoaiBySlug(slug);
+        theLoaiRepository.delete(theLoai);
+    }
+
 }
