@@ -1,16 +1,14 @@
 package com.chothuesach.repository;
 
 import com.chothuesach.model.TheLoai;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import java.util.Optional;
 
-public interface TheLoaiRepository extends CrudRepository<TheLoai, Long> {
+public interface TheLoaiRepository extends JpaRepository<TheLoai, Long> {
 
-    List<TheLoai> findAll();
+    Optional<TheLoai> getBySlug(String slug);
 
-    TheLoai getBySlug(String slug);
-
-    TheLoai getByTenTheLoai(String tenTheLoai);
+    Optional<TheLoai> getByTenTheLoai(String tenTheLoai);
 
 }
