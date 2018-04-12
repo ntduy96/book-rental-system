@@ -34,4 +34,14 @@ public class TheLoaiResource {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @PutMapping("/{slug}")
+    public void updateTenTheLoai(@PathVariable String slug, @RequestParam String newTenTheLoai) {
+        theLoaiService.changeTenTheLoai(slug, newTenTheLoai);
+    }
+
+    @DeleteMapping("/{slug}")
+    public void deleteTheLoai(@PathVariable String slug) {
+        theLoaiService.deleteTheLoai(slug);
+    }
+
 }
