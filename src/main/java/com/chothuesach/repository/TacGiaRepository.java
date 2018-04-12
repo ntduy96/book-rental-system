@@ -1,18 +1,16 @@
 package com.chothuesach.repository;
 
 import com.chothuesach.model.TacGia;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface TacGiaRepository extends CrudRepository<TacGia, String> {
+public interface TacGiaRepository extends JpaRepository<TacGia, String> {
 
-    List<TacGia> findAll();
+    Optional<TacGia> getBySlug(String slug);
 
-    TacGia getBySlug(String slug);
-
-    TacGia getByTenTacGia(String tenTacGia);
+    Optional<TacGia> getByTenTacGia(String tenTacGia);
 
 }
