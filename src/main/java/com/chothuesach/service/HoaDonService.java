@@ -85,7 +85,8 @@ public class HoaDonService {
     }
 
     public void xoaHoaDon(String maHoaDon) {
-        hoaDonRepository.deleteHoaDonByMaHoaDon(maHoaDon);
+        HoaDon hoaDon = getHoaDonByMaHoaDon(maHoaDon);
+        hoaDonRepository.delete(hoaDon);
     }
 
 }
