@@ -60,7 +60,6 @@ public class HoaDon implements Serializable {
 	@NotNull
 	private String diaChiKhachHang;
 
-	@NotNull
 	private String hoTenNhanVien;
 
 	@PrePersist
