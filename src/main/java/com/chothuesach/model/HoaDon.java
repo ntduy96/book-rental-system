@@ -51,10 +51,54 @@ public class HoaDon implements Serializable {
 	@JsonView(HoaDonView.Detailed.class)
 	private NguoiDung khachHang;
 
+	@NotNull
+	private String hoTenKhachHang;
+
+	@NotNull
+	private String soCmndKhachHang;
+
+	@NotNull
+	private String diaChiNguoiDung;
+
+	@NotNull
+	private String hoTenNhanVien;
+
 	@PrePersist
 	protected void onCreate() {
 		ngayLapHoaDon = new Date();
 		giaTri = 0;
+	}
+
+	public String getHoTenKhachHang() {
+		return hoTenKhachHang;
+	}
+
+	public void setHoTenKhachHang(String hoTenKhachHang) {
+		this.hoTenKhachHang = hoTenKhachHang;
+	}
+
+	public String getSoCmndKhachHang() {
+		return soCmndKhachHang;
+	}
+
+	public void setSoCmndKhachHang(String soCmndKhachHang) {
+		this.soCmndKhachHang = soCmndKhachHang;
+	}
+
+	public String getDiaChiNguoiDung() {
+		return diaChiNguoiDung;
+	}
+
+	public void setDiaChiNguoiDung(String diaChiNguoiDung) {
+		this.diaChiNguoiDung = diaChiNguoiDung;
+	}
+
+	public String getHoTenNhanVien() {
+		return hoTenNhanVien;
+	}
+
+	public void setHoTenNhanVien(String hoTenNhanVien) {
+		this.hoTenNhanVien = hoTenNhanVien;
 	}
 
 	/** @pdGenerated default getter */
