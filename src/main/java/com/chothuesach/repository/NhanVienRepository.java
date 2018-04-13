@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface NhanVienRepository extends CrudRepository<NhanVien, String> {
@@ -17,7 +18,7 @@ public interface NhanVienRepository extends CrudRepository<NhanVien, String> {
 
     List<NhanVien> getAllByChucVu(ChucVu chucVu);
 
-    NhanVien getByTenNguoiDung(String tenNguoiDung);
+    Optional<NhanVien> getByTenNguoiDung(String tenNguoiDung);
 
     @Modifying
     @Query("DELETE FROM NhanVien WHERE MA_NHAN_VIEN = ?1")

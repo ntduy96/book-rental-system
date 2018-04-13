@@ -2,7 +2,7 @@ package com.chothuesach.service;
 
 import com.chothuesach.dto.NhanVienDto;
 import com.chothuesach.exception.EmailExistsException;
-import com.chothuesach.exception.UserNotFoundException;
+import com.chothuesach.exception.ResourceNotFoundException;
 import com.chothuesach.model.NhanVien;
 import com.chothuesach.model.Role;
 import com.chothuesach.repository.ChucVuRepository;
@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class NhanVienService {
@@ -43,11 +40,19 @@ public class NhanVienService {
     }
 
     public NhanVien getByMaNhanVien(String maNhanVien) {
-        return nhanVienRepository.findById(maNhanVien).orElseThrow(UserNotFoundException::new);
+        Optional<NhanVien> result = nhanVienRepository.findById(maNhanVien);
+        if (result.isPresent()) {
+            return result.get();
+        }
+        throw new ResourceNotFoundException("Can't find any Nhan vien matching maNhanVien: " + maNhanVien);
     }
 
     public NhanVien getByTenNguoiDung(String tenNguoiDung) {
-        return nhanVienRepository.getByTenNguoiDung(tenNguoiDung);
+        Optional<NhanVien> result = nhanVienRepository.getByTenNguoiDung(tenNguoiDung);
+        if (result.isPresent()) {
+            return result.get();
+        }
+        throw new ResourceNotFoundException("Can't find any Nhan vien matching tenNhanVien: " + tenNguoiDung);
     }
 
     public NhanVien createNewNhanVien(NhanVienDto nhanVienDto) {
@@ -80,7 +85,7 @@ public class NhanVienService {
     }
 
     public void removeRole(String maNhanVien, String roleName) {
-        NhanVien nhanVien = nhanVienRepository.findById(maNhanVien).get();
+        NhanVien nhanVien = getByMaNhanVien(maNhanVien);
         Collection<Role> roles = nhanVien.getRoles();
         roles.remove(roleRepository.findOneByRoleName(roleName));
         nhanVienRepository.save(nhanVien);
