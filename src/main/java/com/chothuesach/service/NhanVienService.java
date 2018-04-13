@@ -92,7 +92,8 @@ public class NhanVienService {
 
     public void deleteNhanVien(String maNhanVien) {
         removeRole(maNhanVien, "ROLE_STAFF");
-        nhanVienRepository.deleteNhanVienByMaNguoiDung(maNhanVien);
+        NhanVien nhanVien = getByMaNhanVien(maNhanVien);
+        nhanVienRepository.delete(nhanVien);
     }
 
 }
