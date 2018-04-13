@@ -46,19 +46,15 @@ public class HoaDonResource {
 
     @PostMapping(consumes = "application/json")
     @JsonView(HoaDonView.Detailed.class)
-    public ResponseEntity<Object> createNewHoaDon(@Valid @RequestBody HoaDonDto hoaDonDto, BindingResult result) {
+    public ResponseEntity<Object> createNewHoaDon(Principal principal, @Valid @RequestBody HoaDonDto hoaDonDto, BindingResult result) {
         if (result.hasErrors()) {
             return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
         } else {
-            try {
-                HoaDon hoaDon = hoaDonService.taoHoaDon(hoaDonDto);
-                HashMap<String, Object> response = new HashMap<>();
-                response.put("created", "ok");
-                response.put("hoaDon", hoaDon);
-                return new ResponseEntity<>(response, HttpStatus.OK);
-            } catch (Exception e) {
-                return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-            }
+            HoaDon hoaDon = hoaDonService.taoHoaDon(principal.getName(), hoaDonDto);
+            HashMap<String, Object> response = new HashMap<>();
+            response.put("created", "ok");
+            response.put("hoaDon", hoaDon);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
     }
 
