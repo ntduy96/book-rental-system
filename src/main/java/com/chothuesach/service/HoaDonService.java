@@ -2,13 +2,11 @@ package com.chothuesach.service;
 
 import com.chothuesach.dto.ChiTietHoaDonDto;
 import com.chothuesach.dto.HoaDonDto;
-import com.chothuesach.exception.HoaDonNotFoundException;
 import com.chothuesach.exception.ResourceNotFoundException;
 import com.chothuesach.model.*;
 import com.chothuesach.repository.ChiTietHoaDonRepository;
 import com.chothuesach.repository.HoaDonRepository;
 import com.chothuesach.repository.NguoiDungRepository;
-import com.chothuesach.repository.NhanVienRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +21,7 @@ public class HoaDonService {
     private HoaDonRepository hoaDonRepository;
 
     @Autowired
-    private NhanVienRepository nhanVienRepository;
+    private NhanVienService nhanVienService;
 
     @Autowired
     private NguoiDungRepository nguoiDungRepository;
@@ -39,23 +37,22 @@ public class HoaDonService {
     }
 
     public HoaDon getHoaDonByMaHoaDon(String maHoaDon) {
-        return hoaDonRepository.findById(maHoaDon).orElseThrow(HoaDonNotFoundException::new);
+        Optional<HoaDon> optional = hoaDonRepository.findById(maHoaDon);
+        if (optional.isPresent()) {
+            return optional.get();
+        }
+        throw new ResourceNotFoundException("Can't find any Hoa don matching maHoaDon: " + maHoaDon);
     }
 
     public List<HoaDon> getHoaDonOfKhachHang(NguoiDung khachHang) {
         return hoaDonRepository.getByKhachHangOrderByNgayLapHoaDonDesc(khachHang);
     }
 
-    public void thanhToanHoaDon(String maHoaDon, String maNhanVien) {
-        Optional<HoaDon> optional = hoaDonRepository.findById(maHoaDon);
-        if (optional.isPresent()) {
-            throw new ResourceNotFoundException("Can't find any Hoa don matching maHoaDon: " + maHoaDon);
-        } else {
-            HoaDon hoaDon = optional.get();
-            hoaDon.setNhanVien(nhanVienRepository.findById(maNhanVien).get());
-            hoaDon.setNgayThanhToan(new Date());
-            hoaDonRepository.save(hoaDon);
-        }
+    public HoaDon thanhToanHoaDon(String maHoaDon, String tenNhanVien) {
+        HoaDon hoaDon = getHoaDonByMaHoaDon(maHoaDon);
+        hoaDon.setNhanVien(nhanVienService.getByTenNguoiDung(tenNhanVien));
+        hoaDon.setNgayThanhToan(new Date());
+        return hoaDonRepository.save(hoaDon);
     }
 
     public HoaDon taoHoaDon(String tenNguoiDung, HoaDonDto hoaDonDto) {
