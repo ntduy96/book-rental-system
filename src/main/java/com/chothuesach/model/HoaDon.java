@@ -55,7 +55,6 @@ public class HoaDon implements Serializable {
 	protected void onCreate() {
 		ngayLapHoaDon = new Date();
 		giaTri = 0;
-		chiTietHoaDon.forEach((row) -> giaTri += row.donGiaBan * row.soLuongBan);
 	}
 
 	/** @pdGenerated default getter */
