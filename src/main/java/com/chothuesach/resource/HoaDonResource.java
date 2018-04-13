@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashMap;
@@ -60,11 +61,13 @@ public class HoaDonResource {
 
     @PutMapping("/{maHoaDon}")
     @JsonView(HoaDonView.Detailed.class)
+    @RolesAllowed(value = { "ROLE_ADMIN", "ROLE_STAFF" })
     public HoaDon thanhToanHoaDon(@PathVariable String maHoaDon, Principal principal) {
         return hoaDonService.thanhToanHoaDon(maHoaDon, principal.getName());
     }
 
     @DeleteMapping("/{maHoaDon}")
+    @RolesAllowed(value = { "ROLE_ADMIN", "ROLE_STAFF" })
     public ResponseEntity xoaHoaDon(@PathVariable String maHoaDon) {
         hoaDonService.xoaHoaDon(maHoaDon);
         return new ResponseEntity(HttpStatus.OK);
