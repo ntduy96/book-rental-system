@@ -52,14 +52,18 @@ public class HoaDon implements Serializable {
 	private NguoiDung khachHang;
 
 	@NotNull
+	@JsonView(HoaDonView.Detailed.class)
 	private String hoTenKhachHang;
 
 	@NotNull
+	@JsonView(HoaDonView.Detailed.class)
 	private String soCmndKhachHang;
 
 	@NotNull
+	@JsonView(HoaDonView.Detailed.class)
 	private String diaChiKhachHang;
 
+	@JsonView(HoaDonView.Detailed.class)
 	private String hoTenNhanVien;
 
 	@PrePersist
