@@ -58,7 +58,7 @@ public class HoaDon implements Serializable {
 	private String soCmndKhachHang;
 
 	@NotNull
-	private String diaChiNguoiDung;
+	private String diaChiKhachHang;
 
 	@NotNull
 	private String hoTenNhanVien;
@@ -85,15 +85,15 @@ public class HoaDon implements Serializable {
 		this.soCmndKhachHang = soCmndKhachHang;
 	}
 
-	public String getDiaChiNguoiDung() {
-		return diaChiNguoiDung;
-	}
+    public String getDiaChiKhachHang() {
+        return diaChiKhachHang;
+    }
 
-	public void setDiaChiNguoiDung(String diaChiNguoiDung) {
-		this.diaChiNguoiDung = diaChiNguoiDung;
-	}
+    public void setDiaChiKhachHang(String diaChiKhachHang) {
+        this.diaChiKhachHang = diaChiKhachHang;
+    }
 
-	public String getHoTenNhanVien() {
+    public String getHoTenNhanVien() {
 		return hoTenNhanVien;
 	}
 
