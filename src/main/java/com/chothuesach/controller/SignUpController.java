@@ -1,7 +1,7 @@
 package com.chothuesach.controller;
 
 import com.chothuesach.dto.NguoiDungDto;
-import com.chothuesach.exception.EmailExistsException;
+import com.chothuesach.exception.ResourceConflictException;
 import com.chothuesach.model.NguoiDung;
 import com.chothuesach.service.NguoiDungService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +46,9 @@ public class SignUpController {
 				model.addAttribute("success", true);
 				return new ModelAndView("redirect:login", model);
 			}
-		} catch (EmailExistsException e) {
+		} catch (ResourceConflictException e) {
 			model.addAttribute("exist", true);
-			model.addAttribute("message", "Email " + nguoiDungDto.getEmail() + " already existed!");
+			model.addAttribute("message", e.getMessage());
 			return new ModelAndView("redirect:login", model);
 		}
 
