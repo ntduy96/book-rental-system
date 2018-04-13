@@ -2,19 +2,17 @@ package com.chothuesach.service;
 
 import com.chothuesach.dto.ChiTietHoaDonDto;
 import com.chothuesach.dto.HoaDonDto;
-import com.chothuesach.exception.BookNotFoundException;
 import com.chothuesach.exception.HoaDonNotFoundException;
-import com.chothuesach.exception.UserNotFoundException;
-import com.chothuesach.model.ChiTietHoaDon;
-import com.chothuesach.model.ChiTietHoaDonId;
-import com.chothuesach.model.HoaDon;
-import com.chothuesach.model.NguoiDung;
-import com.chothuesach.repository.*;
+import com.chothuesach.exception.ResourceNotFoundException;
+import com.chothuesach.model.*;
+import com.chothuesach.repository.ChiTietHoaDonRepository;
+import com.chothuesach.repository.HoaDonRepository;
+import com.chothuesach.repository.NguoiDungRepository;
+import com.chothuesach.repository.NhanVienRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +29,7 @@ public class HoaDonService {
     private NguoiDungRepository nguoiDungRepository;
 
     @Autowired
-    private SachRepository sachRepository;
+    private SachService sachService;
 
     @Autowired
     private ChiTietHoaDonRepository chiTietHoaDonRepository;
@@ -48,10 +46,10 @@ public class HoaDonService {
         return hoaDonRepository.getByKhachHangOrderByNgayLapHoaDonDesc(khachHang);
     }
 
-    public void thanhToanHoaDon(String maHoaDon, String maNhanVien) throws Exception {
+    public void thanhToanHoaDon(String maHoaDon, String maNhanVien) {
         Optional<HoaDon> optional = hoaDonRepository.findById(maHoaDon);
         if (optional.isPresent()) {
-            throw new Exception();
+            throw new ResourceNotFoundException("Can't find any Hoa don matching maHoaDon: " + maHoaDon);
         } else {
             HoaDon hoaDon = optional.get();
             hoaDon.setNhanVien(nhanVienRepository.findById(maNhanVien).get());
@@ -60,21 +58,22 @@ public class HoaDonService {
         }
     }
 
-    public HoaDon taoHoaDon(HoaDonDto hoaDonDto) throws Exception {
+    public HoaDon taoHoaDon(String tenNguoiDung, HoaDonDto hoaDonDto) {
         HoaDon hoaDon = new HoaDon();
-        hoaDon.setKhachHang(nguoiDungRepository.findById(hoaDonDto.getMaKhachHang()).orElseThrow(UserNotFoundException::new));
+        hoaDon.setKhachHang(nguoiDungRepository.findOneByTenNguoiDung(tenNguoiDung));
         HoaDon savedHoaDon = hoaDonRepository.save(hoaDon);
         double giaTri = 0;
-        Iterator<ChiTietHoaDonDto> iterator = hoaDonDto.getChiTietHoaDonList().listIterator();
-        while (iterator.hasNext()) {
-            ChiTietHoaDonDto chiTietHoaDonDto = iterator.next();
+        for (ChiTietHoaDonDto chiTietHoaDonDto : hoaDonDto.getChiTietHoaDonList()) {
+            Sach sach = sachService.getOneByMaSach(chiTietHoaDonDto.getMaSach());
+            if (sach.getSoLuong() < chiTietHoaDonDto.getSoLuongBan()) continue;
             ChiTietHoaDon chiTietHoaDon = new ChiTietHoaDon();
             chiTietHoaDon.setChiTietHoaDonId(new ChiTietHoaDonId(chiTietHoaDonDto.getMaSach(), savedHoaDon.getMaHoaDon()));
             chiTietHoaDon.setHoaDon(savedHoaDon);
-            chiTietHoaDon.setSach(sachRepository.findById(chiTietHoaDonDto.getMaSach()).orElseThrow(BookNotFoundException::new));
-            chiTietHoaDon.setDonGiaBan(chiTietHoaDonDto.getDonGiaBan());
+            chiTietHoaDon.setSach(sach);
+            chiTietHoaDon.setDonGiaBan(sachService.getLatestPrice(sach.getSlug()).donGia);
             chiTietHoaDon.setSoLuongBan(chiTietHoaDonDto.getSoLuongBan());
             ChiTietHoaDon saved = chiTietHoaDonRepository.save(chiTietHoaDon);
+            sachService.changeSoLuongSach(sach.getSlug(), sach.getSoLuong() - chiTietHoaDonDto.getSoLuongBan());
             giaTri += saved.getDonGiaBan() * saved.getSoLuongBan();
         }
         savedHoaDon.setGiaTri(giaTri);
