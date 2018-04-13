@@ -1,6 +1,7 @@
 package com.chothuesach.controller;
 
 import com.chothuesach.error.ApiError;
+import com.chothuesach.exception.ResourceConflictException;
 import com.chothuesach.exception.ResourceNotFoundException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -58,7 +59,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     // 409
 
-    @ExceptionHandler({ InvalidDataAccessApiUsageException.class, DataAccessException.class })
+    @ExceptionHandler({ InvalidDataAccessApiUsageException.class, DataAccessException.class, ResourceConflictException.class })
     public ResponseEntity<Object> handleConflict(final RuntimeException ex, final WebRequest request) {
         ApiError body = new ApiError(HttpStatus.CONFLICT, ex.getMessage(), ex.toString());
         return handleExceptionInternal(ex, body, new HttpHeaders(), HttpStatus.CONFLICT, request);
