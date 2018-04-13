@@ -9,6 +9,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
@@ -19,6 +20,9 @@ public class ChiTietHoaDon implements Serializable {
 	@EmbeddedId
 	@JsonIgnore
 	private ChiTietHoaDonId chiTietHoaDonId;
+
+	@NotNull
+	private String tenSach;
 
 	@JsonView(HoaDonView.Detailed.class)
 	public int soLuongBan;
