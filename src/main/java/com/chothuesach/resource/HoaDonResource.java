@@ -64,4 +64,10 @@ public class HoaDonResource {
         return hoaDonService.thanhToanHoaDon(maHoaDon, principal.getName());
     }
 
+    @DeleteMapping("/{maHoaDon}")
+    public ResponseEntity xoaHoaDon(@PathVariable String maHoaDon) {
+        hoaDonService.xoaHoaDon(maHoaDon);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
 }
