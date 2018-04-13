@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,7 @@ public class NhanVienResource {
         return nhanVienService.getByTenNguoiDung(tenNguoiDung);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     @JsonView(NhanVienView.Detailed.class)
     public ResponseEntity registerNewNhanVien(@Valid NhanVienDto nhanVienDto, BindingResult result) {
@@ -55,6 +57,7 @@ public class NhanVienResource {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{maNhanVien}")
     public ResponseEntity deleteNhanVien(@PathVariable String maNhanVien) {
         nhanVienService.deleteNhanVien(maNhanVien);
