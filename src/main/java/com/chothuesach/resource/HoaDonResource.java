@@ -58,4 +58,10 @@ public class HoaDonResource {
         }
     }
 
+    @PutMapping("/{maHoaDon}")
+    @JsonView(HoaDonView.Detailed.class)
+    public HoaDon thanhToanHoaDon(@PathVariable String maHoaDon, Principal principal) {
+        return hoaDonService.thanhToanHoaDon(maHoaDon, principal.getName());
+    }
+
 }
