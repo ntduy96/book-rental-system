@@ -1,17 +1,16 @@
 package com.chothuesach.resource;
 
-import java.util.HashMap;
-
+import com.chothuesach.service.NguoiDungService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.chothuesach.service.NguoiDungService;
+import java.util.HashMap;
 
 @RestController
-@RequestMapping("/resource/nguoidung")
+@RequestMapping("/api/nguoidung")
 public class NguoiDungResource {
 
 	@Autowired
@@ -36,21 +35,21 @@ public class NguoiDungResource {
 	private HashMap<String, Boolean> tenNguoiDungExistenceCheck(
 			@RequestParam(name = "ten-nguoi-dung") String tenNguoiDung) {
 		Boolean isExisted = nguoiDungService.tenNguoiDungExist(tenNguoiDung);
-		HashMap<String, Boolean> response = new HashMap<String, Boolean>();
+		HashMap<String, Boolean> response = new HashMap<>();
 		response.put("isExisted", isExisted);
 		return response;
 	}
 
 	private HashMap<String, Boolean> emailExistenceCheck(@RequestParam(name = "email") String email) {
 		Boolean isExisted = nguoiDungService.emailExist(email);
-		HashMap<String, Boolean> response = new HashMap<String, Boolean>();
+		HashMap<String, Boolean> response = new HashMap<>();
 		response.put("isExisted", isExisted);
 		return response;
 	}
 
 	private HashMap<String, Boolean> soCmndExistenceCheck(@RequestParam(name = "so-cmnd") String soCmnd) {
 		Boolean isExisted = nguoiDungService.soCmndExist(soCmnd);
-		HashMap<String, Boolean> response = new HashMap<String, Boolean>();
+		HashMap<String, Boolean> response = new HashMap<>();
 		response.put("isExisted", isExisted);
 		return response;
 	}
