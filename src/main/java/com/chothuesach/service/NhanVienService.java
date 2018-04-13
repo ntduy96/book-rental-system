@@ -5,7 +5,6 @@ import com.chothuesach.exception.EmailExistsException;
 import com.chothuesach.exception.ResourceNotFoundException;
 import com.chothuesach.model.NhanVien;
 import com.chothuesach.model.Role;
-import com.chothuesach.repository.ChucVuRepository;
 import com.chothuesach.repository.NhanVienRepository;
 import com.chothuesach.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ public class NhanVienService {
     private NhanVienRepository nhanVienRepository;
 
     @Autowired
-    private ChucVuRepository chucVuRepository;
+    private ChucVuService chucVuService;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -36,7 +35,7 @@ public class NhanVienService {
     }
 
     public List<NhanVien> getAllNhanVienByChucVu(Short maChucVu) {
-        return nhanVienRepository.getAllByChucVu(chucVuRepository.findById(maChucVu).orElseThrow(RuntimeException::new));
+        return nhanVienRepository.getAllByChucVu(chucVuService.getByMaChucVu(maChucVu));
     }
 
     public NhanVien getByMaNhanVien(String maNhanVien) {
@@ -60,7 +59,7 @@ public class NhanVienService {
             throw new EmailExistsException(nhanVienDto.getEmail());
         } else {
             NhanVien nhanVien = new NhanVien();
-            nhanVien.setChucVu(chucVuRepository.findById(nhanVienDto.getMaChucVu()).get());
+            nhanVien.setChucVu(chucVuService.getByMaChucVu(nhanVienDto.getMaChucVu()));
             nhanVien.setTenNguoiDung(nhanVienDto.getTenNguoiDung());
             nhanVien.setHoTenNguoiDung(nhanVienDto.getHoTenNguoiDung());
             nhanVien.setEmail(nhanVienDto.getEmail());
@@ -78,7 +77,7 @@ public class NhanVienService {
     }
 
     public void addRole(String maNhanVien, String roleName) {
-        NhanVien nhanVien = nhanVienRepository.findById(maNhanVien).get();
+        NhanVien nhanVien = getByMaNhanVien(maNhanVien);
         Set<Role> roles = (Set<Role>) nhanVien.getRoles();
         roles.add(roleRepository.findOneByRoleName(roleName));
         nhanVienRepository.save(nhanVien);
