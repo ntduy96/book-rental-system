@@ -22,6 +22,7 @@ public class ChiTietHoaDon implements Serializable {
 	private ChiTietHoaDonId chiTietHoaDonId;
 
 	@NotNull
+	@JsonView(HoaDonView.Detailed.class)
 	private String tenSach;
 
 	@JsonView(HoaDonView.Detailed.class)
