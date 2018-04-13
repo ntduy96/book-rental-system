@@ -45,7 +45,15 @@ public class ChiTietHoaDon implements Serializable {
 		return chiTietHoaDonId;
 	}
 
-	public void setChiTietHoaDonId(ChiTietHoaDonId chiTietHoaDonId) {
+    public String getTenSach() {
+        return tenSach;
+    }
+
+    public void setTenSach(String tenSach) {
+        this.tenSach = tenSach;
+    }
+
+    public void setChiTietHoaDonId(ChiTietHoaDonId chiTietHoaDonId) {
 		this.chiTietHoaDonId = chiTietHoaDonId;
 	}
 
