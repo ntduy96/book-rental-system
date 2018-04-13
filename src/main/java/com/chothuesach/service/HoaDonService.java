@@ -50,14 +50,20 @@ public class HoaDonService {
 
     public HoaDon thanhToanHoaDon(String maHoaDon, String tenNhanVien) {
         HoaDon hoaDon = getHoaDonByMaHoaDon(maHoaDon);
-        hoaDon.setNhanVien(nhanVienService.getByTenNguoiDung(tenNhanVien));
+        NhanVien nhanVien = nhanVienService.getByTenNguoiDung(tenNhanVien);
+        hoaDon.setNhanVien(nhanVien);
+        hoaDon.setHoTenNhanVien(nhanVien.getHoTenNguoiDung());
         hoaDon.setNgayThanhToan(new Date());
         return hoaDonRepository.save(hoaDon);
     }
 
     public HoaDon taoHoaDon(String tenNguoiDung, HoaDonDto hoaDonDto) {
         HoaDon hoaDon = new HoaDon();
-        hoaDon.setKhachHang(nguoiDungRepository.findOneByTenNguoiDung(tenNguoiDung));
+        NguoiDung khachHang = nguoiDungRepository.findOneByTenNguoiDung(tenNguoiDung);
+        hoaDon.setKhachHang(khachHang);
+        hoaDon.setHoTenKhachHang(khachHang.getHoTenNguoiDung());
+        hoaDon.setSoCmndKhachHang(khachHang.getSoCmnd());
+        hoaDon.setDiaChiKhachHang(khachHang.getDiaChiNguoiDung());
         HoaDon savedHoaDon = hoaDonRepository.save(hoaDon);
         double giaTri = 0;
         for (ChiTietHoaDonDto chiTietHoaDonDto : hoaDonDto.getChiTietHoaDonList()) {
@@ -67,6 +73,7 @@ public class HoaDonService {
             chiTietHoaDon.setChiTietHoaDonId(new ChiTietHoaDonId(chiTietHoaDonDto.getMaSach(), savedHoaDon.getMaHoaDon()));
             chiTietHoaDon.setHoaDon(savedHoaDon);
             chiTietHoaDon.setSach(sach);
+            chiTietHoaDon.setTenSach(sach.getTenSach());
             chiTietHoaDon.setDonGiaBan(sachService.getLatestPrice(sach.getSlug()).donGia);
             chiTietHoaDon.setSoLuongBan(chiTietHoaDonDto.getSoLuongBan());
             ChiTietHoaDon saved = chiTietHoaDonRepository.save(chiTietHoaDon);
