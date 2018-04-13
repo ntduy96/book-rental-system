@@ -1,18 +1,19 @@
 package com.chothuesach.service;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import com.chothuesach.dto.NguoiDungDto;
-import com.chothuesach.exception.EmailExistsException;
+import com.chothuesach.exception.ResourceConflictException;
+import com.chothuesach.exception.ResourceNotFoundException;
 import com.chothuesach.model.NguoiDung;
 import com.chothuesach.model.Role;
 import com.chothuesach.repository.NguoiDungRepository;
 import com.chothuesach.repository.RoleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class NguoiDungService {
@@ -26,40 +27,52 @@ public class NguoiDungService {
 	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
 
 	public NguoiDung getOneByUsername(String username) {
-		return nguoiDungRepository.findOneByTenNguoiDung(username);
+		Optional<NguoiDung> result = nguoiDungRepository.findOneByTenNguoiDung(username);
+		if (result.isPresent()) {
+			return result.get();
+		}
+		throw new ResourceNotFoundException("Can't find any Nguoi Dung matching tenNguoiDung: " + username);
 	}
 
 	public NguoiDung registerNewNguoiDung(NguoiDungDto nguoiDungDto) {
 		
 		if (emailExist(nguoiDungDto.getEmail())) {
-			throw new EmailExistsException(nguoiDungDto.getEmail());
-		} else {
-			NguoiDung newNguoiDung = new NguoiDung();
-			newNguoiDung.setTenNguoiDung(nguoiDungDto.getTenNguoiDung());
-			newNguoiDung.setHoTenNguoiDung(nguoiDungDto.getHoTenNguoiDung());
-			newNguoiDung.setDiaChiNguoiDung(nguoiDungDto.getDiaChiNguoiDung());
-			newNguoiDung.setEmail(nguoiDungDto.getEmail());
-			newNguoiDung.setSoCmnd(nguoiDungDto.getSoCmnd());
-			newNguoiDung.setPassword(passwordEncoder.encode(nguoiDungDto.getPassword()));
-			Set<Role> roles = new HashSet<Role>();
-			Role userRole = roleRepository.findOneByRoleName("ROLE_USER");// Assign ROLE_USER as default for new account
-			roles.add(userRole);
-			newNguoiDung.setRoles(roles);
-			return nguoiDungRepository.save(newNguoiDung);
+			throw new ResourceConflictException("email " + nguoiDungDto.getEmail() + " đã tồn tại");
 		}
+
+		if (tenNguoiDungExist(nguoiDungDto.getTenNguoiDung())) {
+			throw new ResourceConflictException("tên người dùng " + nguoiDungDto.getTenNguoiDung() + " đã tồn tại");
+		}
+
+		if (soCmndExist(nguoiDungDto.getSoCmnd())) {
+			throw new ResourceConflictException("số CMND " + nguoiDungDto.getSoCmnd() + " đã tồn tại");
+		}
+
+		NguoiDung newNguoiDung = new NguoiDung();
+		newNguoiDung.setTenNguoiDung(nguoiDungDto.getTenNguoiDung());
+		newNguoiDung.setHoTenNguoiDung(nguoiDungDto.getHoTenNguoiDung());
+		newNguoiDung.setDiaChiNguoiDung(nguoiDungDto.getDiaChiNguoiDung());
+		newNguoiDung.setEmail(nguoiDungDto.getEmail());
+		newNguoiDung.setSoCmnd(nguoiDungDto.getSoCmnd());
+		newNguoiDung.setPassword(passwordEncoder.encode(nguoiDungDto.getPassword()));
+		Set<Role> roles = new HashSet<>();
+		Role userRole = roleRepository.findOneByRoleName("ROLE_USER");// Assign ROLE_USER as default for new account
+		roles.add(userRole);
+		newNguoiDung.setRoles(roles);
+		return nguoiDungRepository.save(newNguoiDung);
 
 	}
 
 	public boolean emailExist(String email) {
-		return nguoiDungRepository.findOneByEmail(email) != null ? true : false;
+		return nguoiDungRepository.findOneByEmail(email) != null;
 	}
 	
 	public boolean tenNguoiDungExist(String tenNguoiDung) {
-		return nguoiDungRepository.findOneByTenNguoiDung(tenNguoiDung) != null ? true : false;
+		return nguoiDungRepository.findOneByTenNguoiDung(tenNguoiDung) != null;
 	}
 	
 	public boolean soCmndExist(String soCmnd) {
-		return nguoiDungRepository.findOneBySoCmnd(soCmnd) != null ? true : false;
+		return nguoiDungRepository.findOneBySoCmnd(soCmnd) != null;
 	}
 
 }
