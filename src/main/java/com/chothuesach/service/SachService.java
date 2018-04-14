@@ -1,5 +1,6 @@
 package com.chothuesach.service;
 
+import com.chothuesach.config.AwsS3Config;
 import com.chothuesach.dto.SachDto;
 import com.chothuesach.dto.SachUpdateDto;
 import com.chothuesach.exception.BookTitleExistsException;
@@ -13,7 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -116,6 +121,26 @@ public class SachService {
             return sachRepository.save(sach);
         }
     }
+
+    public void setAnhBia(String slug, MultipartFile file) {
+		Sach sach = sachRepository.findOneBySlug(slug);
+		try {
+			// check if file type is image or not
+			if (file.getContentType().contains("image/")) {
+				if (sach.getAnhBia() != null) {
+					AwsS3Config.deleteFile(new URI(sach.getAnhBia()));
+				}
+				// upload image to book-cover folder in s3 file bucket
+				String anhBiaUrl = AwsS3Config.uploadFile("book-cover", file.getOriginalFilename(), file.getInputStream());
+				sach.setAnhBia(anhBiaUrl);
+				sachRepository.save(sach);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public void changeSoLuongSach(String slug, long newSoLuong) {
 		sachRepository.updateSoLuongSachByMaSach(newSoLuong, slug);
