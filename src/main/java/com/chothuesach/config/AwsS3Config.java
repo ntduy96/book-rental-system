@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 
 import java.io.InputStream;
+import java.net.URI;
 
 /**
  * Configuration for AWS S3
@@ -32,7 +33,7 @@ public class AwsS3Config {
         return s3Object.getObjectContent().getHttpRequest().getURI().toString();
     }
 
-    public void deleteFile(String fileName) {
-        s3client.deleteObject(bucketName, fileName);
+    public static void deleteFile(URI uri) {
+        s3client.deleteObject(bucketName, uri.getPath().replaceFirst("/", ""));
     }
 }
