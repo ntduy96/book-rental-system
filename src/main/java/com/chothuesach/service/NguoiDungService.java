@@ -1,5 +1,6 @@
 package com.chothuesach.service;
 
+import com.chothuesach.config.AwsS3Config;
 import com.chothuesach.dto.NguoiDungDto;
 import com.chothuesach.exception.ResourceConflictException;
 import com.chothuesach.exception.ResourceNotFoundException;
@@ -8,9 +9,14 @@ import com.chothuesach.model.Role;
 import com.chothuesach.repository.NguoiDungRepository;
 import com.chothuesach.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -73,6 +79,27 @@ public class NguoiDungService {
 	
 	public boolean soCmndExist(String soCmnd) {
 		return nguoiDungRepository.findOneBySoCmnd(soCmnd) != null;
+	}
+
+	public void setAnhDaiDien(String tenNguoiDung, MultipartFile file) {
+		NguoiDung nguoiDung = getOneByUsername(tenNguoiDung);
+		try {
+		    // check if file type is image or not
+			if (file.getContentType().contains("image/")) {
+				if (nguoiDung.getAnhDaiDien() != null) {
+					AwsS3Config.deleteFile(new URI(nguoiDung.getAnhDaiDien()));
+				}
+				String avatarUrl = AwsS3Config.uploadFile("user-cover", file.getOriginalFilename(), file.getInputStream());
+				nguoiDung.setAnhDaiDien(avatarUrl);
+				nguoiDungRepository.save(nguoiDung);
+			} else {
+				throw new DataIntegrityViolationException("File type " + file.getContentType() + " is not supported");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
