@@ -6,7 +6,6 @@ import com.chothuesach.exception.ResourceNotFoundException;
 import com.chothuesach.model.*;
 import com.chothuesach.repository.ChiTietHoaDonRepository;
 import com.chothuesach.repository.HoaDonRepository;
-import com.chothuesach.repository.NguoiDungRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,7 @@ public class HoaDonService {
     private NhanVienService nhanVienService;
 
     @Autowired
-    private NguoiDungRepository nguoiDungRepository;
+    private NguoiDungService nguoiDungService;
 
     @Autowired
     private SachService sachService;
@@ -59,7 +58,7 @@ public class HoaDonService {
 
     public HoaDon taoHoaDon(String tenNguoiDung, HoaDonDto hoaDonDto) {
         HoaDon hoaDon = new HoaDon();
-        NguoiDung khachHang = nguoiDungRepository.findOneByTenNguoiDung(tenNguoiDung);
+        NguoiDung khachHang = nguoiDungService.getOneByUsername(tenNguoiDung);
         hoaDon.setKhachHang(khachHang);
         hoaDon.setHoTenKhachHang(khachHang.getHoTenNguoiDung());
         hoaDon.setSoCmndKhachHang(khachHang.getSoCmnd());
