@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -52,19 +53,22 @@ public class SachResource {
 		return sachService.getOneBySlug(slug);
 	}
 	
-	@PostMapping
-	public HashMap<String, String> addNewBook(@Valid SachDto sachDto) {
-		Sach sach = sachService.createNewSach(sachDto);
-		HashMap<String, String> response = new HashMap<>();
-		if (sach != null) {
-			response.put("created", "ok");
-			response.put("maSach", sach.getMaSach());
-			response.put("url", "/resource/sach/" + sach.getSlug());
-			return response;
-		} else {
-			response.put("created", "failed");
-			return response;
-		}
+	@PostMapping(consumes = "application/json")
+	@JsonView(SachView.Detailed.class)
+	public ResponseEntity addNewBook(@RequestBody @Valid SachDto sachDto, BindingResult result) {
+        if (result.hasErrors()) {
+            return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+        } else {
+            try {
+                Sach sach = sachService.createNewSach(sachDto);
+                HashMap<String, Object> response = new HashMap<>();
+                response.put("created", "ok");
+                response.put("sach", sach);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+            }
+        }
 	}
 	
 	@PutMapping(value = "/{slug}", consumes = "application/json")
@@ -88,6 +92,11 @@ public class SachResource {
 		HashMap<String, String> response = new HashMap<>();
 		response.put("deleted", "ok");
 		return response;
+	}
+
+	@PostMapping("/{slug}/anhBia")
+	public void changeAnhBia(@PathVariable String slug, @RequestParam("anhBia") MultipartFile file) {
+		sachService.setAnhBia(slug, file);
 	}
 
 	@GetMapping("/theloai/{theLoai}")
