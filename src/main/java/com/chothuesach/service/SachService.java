@@ -19,10 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class SachService {
@@ -78,7 +75,7 @@ public class SachService {
 			newSach.setNgayXuatBan(sachDto.getNgayXuatBan());
 			newSach.setSoLuong(sachDto.getSoLuong());
 			newSach.setSoTrang(sachDto.getSoTrang());
-			newSach.setSachThuocTheLoai(mapTheLoai(sachDto.getTheLoai()));
+			newSach.setSachThuocTheLoai(mapTheLoai(new HashSet<>(), sachDto.getTheLoai()));
 			newSach.setSachCuaTacGia(mapTacGia(sachDto.getTacGia()));
 			newSach.setDonGiaBan(mapDonGiaBan(sachDto.getDonGiaBan()));
 			return sachRepository.save(newSach);
@@ -112,7 +109,7 @@ public class SachService {
                 sach.setNgayXuatBan(newNgayXuatBan);
             }
             if (newTheLoai != null) {
-                sach.setSachThuocTheLoai(mapTheLoai(newTheLoai));
+                sach.setSachThuocTheLoai(mapTheLoai(sach.getSachThuocTheLoai(), newTheLoai));
             }
             if (newTacGia != null) {
                 sach.setSachCuaTacGia(mapTacGia(newTacGia));
@@ -158,8 +155,8 @@ public class SachService {
 		sachRepository.deleteBySlug(slug);
 	}
 	
-	private Set<TheLoai> mapTheLoai(Set<String> tenTheLoais) {
-		Set<TheLoai> theLoais = new HashSet<>();
+	private Collection<TheLoai> mapTheLoai(Collection<TheLoai> theLoais, Set<String> tenTheLoais) {
+		theLoais.removeAll(theLoais);
         for (String theLoai : tenTheLoais) {
             theLoais.add(theLoaiService.getTheLoaiByTenTheLoai(theLoai));
         }
