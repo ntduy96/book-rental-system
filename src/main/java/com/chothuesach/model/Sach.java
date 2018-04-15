@@ -39,7 +39,7 @@ public class Sach implements Serializable {
 	@JsonView({SachView.Overview.class, HoaDonView.Detailed.class})
 	private String slug;
 	
-	@JsonView(SachView.Detailed.class)
+	@JsonView(SachView.Overview.class)
 	private String anhBia;
 	
 	@JsonView(SachView.Detailed.class)
@@ -96,6 +96,7 @@ public class Sach implements Serializable {
 	private Collection<TacGia> sachCuaTacGia;
 	
 	@PrePersist
+	@PreUpdate
 	protected void onCreate() {
 		ngayTao = new Date();
 		slug = Slugify.toSlug(getTenSach());
