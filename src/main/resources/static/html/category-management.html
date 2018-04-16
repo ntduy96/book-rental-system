@@ -1,1 +1,26 @@
-<h3>Category management</h3>
+<div class="table-responsive" ng-show="$parent.viewType == 'list'">
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Mã thể loại</th>
+            <th scope="col">Tên thể loại</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="theLoai in theLoais">
+            <th scope="row">{{$index + 1}}</th>
+            <td>{{theLoai.maTheLoai}}</td>
+            <td>{{theLoai.tenTheLoai}}</td>
+            <td>
+                <div class="btn-group">
+                    <a class="btn btn-sm btn-outline-secondary" ui-sref="library.category.detail({ slug: theLoai.slug })">Xem</a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<ui-view></ui-view>

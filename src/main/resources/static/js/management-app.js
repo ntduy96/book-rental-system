@@ -49,7 +49,13 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
     }).state({
         name: "library.category",
         url: "/category",
-        templateUrl : "/html/category-management.html"
+        templateUrl : "/html/category-management.html",
+        controller: "theLoaiCtrl"
+    }).state({
+        name: "library.category.detail",
+        url: "/:slug",
+        templateUrl : "/html/category-details.html",
+        controller: "theLoaiDetailCtrl"
     });
 
 }]);
@@ -389,4 +395,88 @@ app.controller("tacGiaDetailCtrl", function ($http, $scope, $stateParams, $state
         });
     };
 
+});
+
+app.controller("theLoaiCtrl", function ($http, $scope, $cacheFactory) {
+    $scope.fetchTheLoais = function () {
+        $http.get("/api/theloai", { cache: true })
+            .then(function (response) {
+                $scope.theLoais = response.data;
+            });
+    };
+    $scope.fetchTheLoais();
+    $scope.resetCacheOfTheLoai = function () {
+        var $httpDefaultCache = $cacheFactory.get("$http");
+        $httpDefaultCache.remove("/api/theloai");
+    };
+});
+
+app.controller("theLoaiDetailCtrl", function ($http, $scope, $stateParams, $state, $cacheFactory) {
+    // initialize variables default hiding alerts
+    $scope.saveSuccess = false;
+    $scope.deleteSuccess = true;
+
+    $scope.fetchTheLoaiDetail = function () {
+        $http.get("/api/theloai/" + $stateParams.slug, { cache: true })
+            .then(function (response) {
+                $scope.originalTheLoai = response.data;
+                $scope.editedTheLoai = Object.assign({}, $scope.originalTheLoai);
+                console.log($scope.editedTheLoai);
+            });
+    };
+    $scope.fetchTheLoaiDetail();
+    $scope.resetCacheOfTheLoaiDetail = function () {
+        var $httpDefaultCache = $cacheFactory.get("$http");
+        $httpDefaultCache.remove("/api/theloai/" + $stateParams.slug);
+    };
+
+    $scope.closeModal = function () {
+        $state.go("^", { inherite: true });
+    };
+
+    function getChanges(originalTheLoai, editedTheLoai) {
+        var changes = {};
+        if (originalTheLoai.tenTheLoai != editedTheLoai.tenTheLoai) {
+            changes.newTenTheLoai = editedTheLoai.tenTheLoai;
+        }
+        return changes;
+    }
+
+    $scope.saveChanges = function () {
+        var changes = getChanges($scope.originalTheLoai, $scope.editedTheLoai);
+        if (changes != {}) {
+            console.log(changes);
+            $http({
+                method: "PUT",
+                url: "/api/theloai/" + $stateParams.slug,
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                data: 'newTenTheLoai='+changes.newTenTheLoai
+            }).then(function(response) {
+                if (response.status === 200) {
+                    $scope.resetCacheOfTheLoaiDetail();
+                    $scope.originalTheLoai = response.data;
+                    $scope.editedTheLoai = Object.assign({}, $scope.originalTheLoai);
+                    $scope.$parent.resetCacheOfTheLoai();
+                    $scope.$parent.fetchTheLoais();
+                    $scope.saveSuccess = true;
+                }
+            }).catch(function (error) {
+                $scope.saveSuccess = false;
+            });
+        }
+    };
+
+    $scope.deleteTheLoai = function () {
+        $http.delete("/api/theloai/" + $stateParams.slug)
+            .then(function (response) {
+                console.log(response);
+                if (response.status === 200) {
+                    $scope.closeModal();
+                    $scope.$parent.resetCacheOfTheLoai();
+                    $scope.$parent.fetchTheLoais();
+                }
+            }).catch(function (error) {
+            $scope.deleteSuccess = false;
+        });
+    };
 });
