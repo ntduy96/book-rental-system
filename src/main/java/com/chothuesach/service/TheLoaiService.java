@@ -4,7 +4,7 @@ import com.chothuesach.exception.ResourceNotFoundException;
 import com.chothuesach.model.TheLoai;
 import com.chothuesach.repository.TheLoaiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +16,8 @@ public class TheLoaiService {
     @Autowired
     private TheLoaiRepository theLoaiRepository;
 
-    public List<TheLoai> getDanhSachTheLoai() {
-        return theLoaiRepository.findAll(new Sort(Sort.Direction.ASC, "tenTheLoai"));
+    public List<TheLoai> getDanhSachTheLoai(String tenTheLoai, Pageable pageable) {
+        return theLoaiRepository.getByTenTheLoaiContains(tenTheLoai, pageable);
     }
 
     public TheLoai getTheLoaiBySlug(String slug) {
