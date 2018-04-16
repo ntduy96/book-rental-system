@@ -72,13 +72,16 @@ public class SachResource {
 	}
 	
 	@PutMapping(value = "/{slug}", consumes = "application/json")
+	@JsonView(SachView.Detailed.class)
 	public ResponseEntity updateSach(@PathVariable String slug, @RequestBody @Valid SachUpdateDto sachUpdateDto, BindingResult result) {
         if (result.hasErrors()) {
             return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
         } else {
-            HashMap<String, String> response = new HashMap<>();
-            if (sachService.updateSach(slug, sachUpdateDto) != null) {
+            HashMap<String, Object> response = new HashMap<>();
+            Sach sach = sachService.updateSach(slug, sachUpdateDto);
+            if (sach != null) {
                 response.put("updated", "ok");
+                response.put("sach", sach);
                 return new ResponseEntity<>(response, HttpStatus.OK);
             }
             response.put("updated", "failed");
