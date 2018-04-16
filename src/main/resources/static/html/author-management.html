@@ -1,1 +1,26 @@
-<h3>Author management</h3>
+<div class="table-responsive" ng-show="$parent.viewType == 'list'">
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Mã tác giả</th>
+            <th scope="col">Tên tác giả</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="tacGia in tacGias">
+            <th scope="row">{{$index + 1}}</th>
+            <td>{{tacGia.maTacGia}}</td>
+            <td>{{tacGia.tenTacGia}}</td>
+            <td>
+                <div class="btn-group">
+                    <a class="btn btn-sm btn-outline-secondary" ui-sref="library.author.detail({ slug: tacGia.slug })">Xem</a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<ui-view></ui-view>

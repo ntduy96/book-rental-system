@@ -1,0 +1,43 @@
+<div class="modal fade show" id="authorDetailModal" tabindex="-1" role="dialog" aria-labelledby="authorDetailModal">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">{{editedTacGia.maTacGia}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col">
+                            <div class="alert alert-success" role="alert" ng-show="saveSuccess">
+                                Đã cập nhật thông tin thành công
+                            </div>
+                            <div class="alert alert-warning" role="alert" ng-hide="deleteSuccess">
+                                Không thể xóa vì còn tồn tại sách của tác giả này
+                            </div>
+                            <div class="mb-3">
+                                <label for="tenTacGia">Tên tác giả</label>
+                                <input type="text" class="form-control" name="tenTacGia" id="tenTacGia" ng-model="editedTacGia.tenTacGia" ng-class="{'is-valid': editedTacGia.tenTacGia !== '', 'is-invalid': editedTacGia.tenTacGia.length < 8}">
+                                <div class="invalid-feedback">
+                                    Không được bỏ trống tên tác giả hoặc tên quá ngắn
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="slug">Slug</label>
+                                <input type="text" class="form-control" name="slug" id="slug" ng-model="editedTacGia.slug" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="closeModal()">Đóng</button>
+                <button type="button" class="btn btn-danger" ng-click="deleteTacGia()">Xóa</button>
+                <button type="button" class="btn btn-primary" ng-click="saveChanges()">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+</div>

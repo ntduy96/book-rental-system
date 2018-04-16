@@ -39,7 +39,13 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
     }).state({
         name: "library.author",
         url: "/author",
-        templateUrl : "/html/author-management.html"
+        templateUrl : "/html/author-management.html",
+        controller: "tacGiaCtrl"
+    }).state({
+        name: "library.author.detail",
+        url: "/:slug",
+        templateUrl : "/html/author-details.html",
+        controller: "tacGiaDetailCtrl"
     }).state({
         name: "library.category",
         url: "/category",
@@ -297,4 +303,90 @@ app.controller("sachDetailTacGiaCtrl", function ($http, $scope, $stateParams, $s
             fetchTacGias();
         });
     }
+});
+
+app.controller("tacGiaCtrl", function ($http, $scope, $cacheFactory) {
+    $scope.fetchTacGias = function () {
+        $http.get("/api/tacgia", { cache: true })
+            .then(function (response) {
+                $scope.tacGias = response.data;
+            });
+    };
+    $scope.fetchTacGias();
+    $scope.resetCacheOfTacGia = function () {
+        var $httpDefaultCache = $cacheFactory.get("$http");
+        $httpDefaultCache.remove("/api/tacgia");
+    };
+});
+
+app.controller("tacGiaDetailCtrl", function ($http, $scope, $stateParams, $state, $cacheFactory) {
+
+    // initialize variables default hiding alerts
+    $scope.saveSuccess = false;
+    $scope.deleteSuccess = true;
+
+    $scope.fetchTacGiaDetail = function () {
+        $http.get("/api/tacgia/" + $stateParams.slug, { cache: true })
+            .then(function (response) {
+                $scope.originalTacGia = response.data;
+                $scope.editedTacGia = Object.assign({}, $scope.originalTacGia);
+                console.log($scope.editedTacGia);
+            });
+    };
+    $scope.fetchTacGiaDetail();
+    $scope.resetCacheOfTacGiaDetail = function () {
+        var $httpDefaultCache = $cacheFactory.get("$http");
+        $httpDefaultCache.remove("/api/tacgia/" + $stateParams.slug);
+    };
+
+    $scope.closeModal = function () {
+        $state.go("^", { inherite: true });
+    };
+
+    function getChanges(originalTacGia, editedTacGia) {
+        var changes = {};
+        if (originalTacGia.tenTacGia != editedTacGia.tenTacGia) {
+            changes.newTenTacGia = editedTacGia.tenTacGia;
+        }
+        return changes;
+    }
+
+    $scope.saveChanges = function () {
+        var changes = getChanges($scope.originalTacGia, $scope.editedTacGia);
+        if (changes != {}) {
+            console.log(changes);
+            $http({
+                method: "PUT",
+                url: "/api/tacgia/" + $stateParams.slug,
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                data: 'newTenTacGia='+changes.newTenTacGia
+            }).then(function(response) {
+                if (response.status === 200) {
+                    $scope.resetCacheOfTacGiaDetail();
+                    $scope.originalTacGia = response.data;
+                    $scope.editedTacGia = Object.assign({}, $scope.originalTacGia);
+                    $scope.$parent.resetCacheOfTacGia();
+                    $scope.$parent.fetchTacGias();
+                    $scope.saveSuccess = true;
+                }
+            }).catch(function (error) {
+                $scope.saveSuccess = false;
+            });
+        }
+    };
+
+    $scope.deleteTacGia = function () {
+        $http.delete("/api/tacgia/" + $stateParams.slug)
+            .then(function (response) {
+                console.log(response);
+                if (response.status === 200) {
+                    $scope.closeModal();
+                    $scope.$parent.resetCacheOfTacGia();
+                    $scope.$parent.fetchTacGias();
+                }
+            }).catch(function (error) {
+                $scope.deleteSuccess = false;
+        });
+    };
+
 });
