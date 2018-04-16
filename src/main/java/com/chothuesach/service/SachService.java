@@ -76,8 +76,8 @@ public class SachService {
 			newSach.setSoLuong(sachDto.getSoLuong());
 			newSach.setSoTrang(sachDto.getSoTrang());
 			newSach.setSachThuocTheLoai(mapTheLoai(new HashSet<>(), sachDto.getTheLoai()));
-			newSach.setSachCuaTacGia(mapTacGia(sachDto.getTacGia()));
-			newSach.setDonGiaBan(mapDonGiaBan(sachDto.getDonGiaBan()));
+			newSach.setSachCuaTacGia(mapTacGia(new HashSet<>(), sachDto.getTacGia()));
+			newSach.setDonGiaBan(mapDonGiaBan(new HashSet<>(), sachDto.getDonGiaBan()));
 			return sachRepository.save(newSach);
 		}
 	}
@@ -112,7 +112,10 @@ public class SachService {
                 sach.setSachThuocTheLoai(mapTheLoai(sach.getSachThuocTheLoai(), newTheLoai));
             }
             if (newTacGia != null) {
-                sach.setSachCuaTacGia(mapTacGia(newTacGia));
+                sach.setSachCuaTacGia(mapTacGia(sach.getSachCuaTacGia(), newTacGia));
+            }
+            if (newDonGiaBan != null) {
+                sach.setDonGiaBan(mapDonGiaBan(sach.getDonGiaBan(), newDonGiaBan));
             }
 
             return sachRepository.save(sach);
@@ -163,16 +166,15 @@ public class SachService {
 		return theLoais;
 	}
 	
-	private Set<TacGia> mapTacGia(Set<String> tenTacGias) {
-		Set<TacGia> tacGias = new HashSet<>();
+	private Collection<TacGia> mapTacGia(Collection<TacGia> tacGias, Set<String> tenTacGias) {
+	    tacGias.removeAll(tacGias);
         for (String tacGia : tenTacGias) {
             tacGias.add(tacGiaService.getOneByTenTacGia(tacGia));
         }
 		return tacGias;
 	}
 	
-	private Set<DonGiaBan> mapDonGiaBan(Double donGiaBan) {
-		Set<DonGiaBan> donGiaBans = new HashSet<DonGiaBan>();
+	private Collection<DonGiaBan> mapDonGiaBan(Collection<DonGiaBan> donGiaBans, Double donGiaBan) {
 		DonGiaBan newDonGiaBan = new DonGiaBan();
 		newDonGiaBan.setDonGia(donGiaBan);
 		donGiaBans.add(newDonGiaBan);
