@@ -36,10 +36,10 @@ public class TacGiaService {
         tacGiaRepository.save(newTacGia);
     }
 
-    public void changeTenTacGia(String slug, String newTenTacGia) {
+    public TacGia changeTenTacGia(String slug, String newTenTacGia) {
         TacGia tacGia = getOneBySlug(slug);
         tacGia.setTenTacGia(newTenTacGia);
-        tacGiaRepository.save(tacGia);
+        return tacGiaRepository.save(tacGia);
     }
 
     public void deleteTacGia(String slug) {

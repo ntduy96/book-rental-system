@@ -34,8 +34,9 @@ public class TacGiaResource {
     }
 
     @PutMapping("/{slug}")
-    public void updateTenTacGia(@PathVariable String slug, @RequestParam String newTenTacGia) {
-        tacGiaService.changeTenTacGia(slug, newTenTacGia);
+    @JsonView(TacGiaView.Detailed.class)
+    public TacGia updateTenTacGia(@PathVariable String slug, @RequestParam String newTenTacGia) {
+        return tacGiaService.changeTenTacGia(slug, newTenTacGia);
     }
 
     @DeleteMapping("/{slug}")
