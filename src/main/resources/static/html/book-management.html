@@ -5,13 +5,19 @@
             <th scope="col">#</th>
             <th scope="col">Mã sách</th>
             <th scope="col">Tên sách</th>
+            <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="sach in sachList">
-            <th scope="row"></th>
+            <th scope="row">{{$index + 1}}</th>
             <td>{{sach.maSach}}</td>
             <td>{{sach.tenSach}}</td>
+            <td>
+                <div class="btn-group">
+                    <a class="btn btn-sm btn-outline-secondary" ui-sref="library.book.detail({ slug: sach.slug })">Xem</a>
+                </div>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -22,13 +28,12 @@
         <div class="row">
             <div ng-repeat="sach in sachList" class="col-md-4 col-lg-3">
                 <div class="card mb-4 box-shadow">
-                    <img src="http://via.placeholder.com/240x320" alt="thumbnail" width="100%">
+                    <img ng-src="{{sach.anhBia != null ? sach.anhBia : 'http://via.placeholder.com/240x320'}}" alt="thumbnail" width="100%">
                     <div class="card-body">
                         <p class="card-text text-center">{{sach.maSach}}</p>
                         <div class="align-items-center d-flex justify-content-center">
                             <div class="btn-group">
                                 <a class="btn btn-sm btn-outline-secondary" ui-sref="library.book.detail({ slug: sach.slug })">Xem</a>
-                                <a class="btn btn-sm btn-outline-secondary">Chỉnh sửa</a>
                             </div>
                         </div>
                     </div>
@@ -36,5 +41,6 @@
             </div>
         </div>
     </div>
-    <ui-view></ui-view>
 </div>
+
+<ui-view></ui-view>
