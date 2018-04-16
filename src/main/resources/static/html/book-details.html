@@ -1,8 +1,8 @@
 <div class="modal fade show" id="bookDetailModal" tabindex="-1" role="dialog" aria-labelledby="bookDetailModal">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-lg modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">{{sach.maSach}}</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">{{editedSach.maSach}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -10,52 +10,75 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <label for="tenSach">Tên sách</label>
-                            <input type="text" class="form-control" name="tenSach" id="tenSach" ng-model="editedSach.tenSach">
-                            <div class="invalid-feedback">
-                                Tên sách này đã tồn tại
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="anhBia">Ảnh bìa sách</label>
+                                <div class="bg-light img-input-thumbnail">
+                                    <p class="h5 input-text text-muted">Select an image</p>
+                                    <img class="img-thumbnail input-figure" ng-src="{{editedSach.anhBia != null ? editedSach.anhBia : ''}}">
+                                    <input type="file" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse ng-empty" name="anhBia" id="anhBia" ng-model="editedSach.anhBia">
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-12 mb-3">
-                            <label for="sachThuocTheLoai">Thể loại</label>
-                            <input type="text" class="form-control" name="sachThuocTheLoai" id="sachThuocTheLoai" ng-model="editedSach.sachThuocTheLoai" ng-click="openTheLoai()">
-                            <div class="invalid-feedback">
-                                Không được bỏ trống thể loại
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="tenSach">Tên sách</label>
+                                <input type="text" class="form-control" name="tenSach" id="tenSach" ng-model="editedSach.tenSach" ng-class="{'is-valid': editedSach.tenSach !== '', 'is-invalid': editedSach.tenSach.length < 8}">
+                                <div class="invalid-feedback">
+                                    Không được bỏ trống tên sách
+                                </div>
                             </div>
-                            <ui-view></ui-view>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <label for="ngayXuatBan">Ngày xuất bản</label>
-                            <input type="date" class="form-control" name="ngayXuatBan" id="ngayXuatBan" ng-model="editedSach.ngayXuatBan">
-                            <div class="invalid-feedback">
-                                Không được bỏ trống ngày xuất bản
+                            <div class="mb-3">
+                                <label for="sachThuocTheLoai">Thể loại</label>
+                                <input type="text" class="form-control" name="sachThuocTheLoai" id="sachThuocTheLoai" ng-model="editedSach.sachThuocTheLoai" ng-click="openTheLoai()">
+                                <div class="invalid-feedback">
+                                    Không được bỏ trống thể loại
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="soTrang">Số trang</label>
-                            <input type="number" class="form-control" name="soTrang" id="soTrang" ng-model="editedSach.soTrang">
-                            <div class="invalid-feedback">
-                                Không được bỏ trống số trang
+                            <div class="mb-3">
+                                <label for="sachCuaTacGia">Thể loại</label>
+                                <input type="text" class="form-control" name="sachCuaTacGia" id="sachCuaTacGia" ng-model="editedSach.sachCuaTacGia" ng-click="openTacGia()">
+                                <div class="invalid-feedback">
+                                    Không được bỏ trống tác giả
+                                </div>
+                                <ui-view></ui-view>
                             </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="soLuong">Số lượng</label>
-                            <input type="number" class="form-control" name="soLuong" id="soLuong" ng-model="editedSach.soLuong">
-                            <div class="invalid-feedback">
-                                Không được bỏ trống số lượng
+                            <div class="mb-3">
+                                <label for="ngayXuatBan">Ngày xuất bản</label>
+                                <input type="date" class="form-control" name="ngayXuatBan" id="ngayXuatBan" ng-model="editedSach.ngayXuatBan" ng-class="{'is-valid': editedSach.ngayXuatBan != null, 'is-invalid': editedSach.ngayXuatBan == null}">
+                                <div class="invalid-feedback">
+                                    Không được bỏ trống ngày xuất bản
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <label for="slug">Slug</label>
-                            <input type="text" class="form-control" name="slug" id="slug" ng-model="editedSach.slug" disabled>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="soTrang">Số trang</label>
+                                    <input type="number" class="form-control" name="soTrang" id="soTrang" ng-model="editedSach.soTrang">
+                                    <div class="invalid-feedback">
+                                        Không được bỏ trống số trang
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="soLuong">Số lượng</label>
+                                    <input type="number" class="form-control" name="soLuong" id="soLuong" ng-model="editedSach.soLuong">
+                                    <div class="invalid-feedback">
+                                        Không được bỏ trống số lượng
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="slug">Slug</label>
+                                <input type="text" class="form-control" name="slug" id="slug" ng-model="editedSach.slug" disabled>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="closeModal()">Đóng</button>
-                <button type="button" class="btn btn-primary">Lưu thay đổi</button>
+                <button type="button" class="btn btn-danger" ng-click="deleteSach()">Xóa</button>
+                <button type="button" class="btn btn-primary" ng-click="saveChanges()">Lưu thay đổi</button>
             </div>
         </div>
     </div>
