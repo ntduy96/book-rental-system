@@ -36,7 +36,7 @@ public class Sach implements Serializable {
 	private String tenSach;
 	
 	@NotNull
-	@JsonView({SachView.Overview.class, HoaDonView.Detailed.class})
+	@JsonView({SachView.Overview.class, HoaDonView.Detailed.class, TheLoaiView.Detailed.class})
 	private String slug;
 	
 	@JsonView(SachView.Overview.class)
