@@ -14,7 +14,7 @@
                             <div class="alert alert-success" role="alert" ng-show="saveSuccess">
                                 Đã tạo thành công
                             </div>
-                            <div class="alert alert-warning" role="alert" ng-hide="saveSuccess">
+                            <div class="alert alert-warning" role="alert" ng-show="saveConflict">
                                 Không thể tạo mới vì đã tồn tại
                             </div>
                             <div class="form-group">
@@ -32,29 +32,29 @@
                                                 <label for="anhBia">Ảnh bìa sách</label>
                                                 <div class="bg-light img-input-thumbnail">
                                                     <p class="h5 input-text text-muted">Select an image</p>
-                                                    <img class="img-thumbnail input-figure" ng-src="{{editedSach.anhBia != null ? editedSach.anhBia : ''}}">
-                                                    <input type="file" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse ng-empty" name="anhBia" id="anhBia" ng-model="editedSach.anhBia">
+                                                    <img class="img-thumbnail input-figure" ng-src="{{anhBia != null ? anhBia : ''}}">
+                                                    <input type="file" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse ng-empty" name="anhBia" id="anhBia" ng-model="anhBia">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col">
                                             <div class="mb-3">
                                                 <label for="tenSach">Tên sách</label>
-                                                <input type="text" class="form-control" name="tenSach" id="tenSach" ng-model="editedSach.tenSach" ng-class="{'is-valid': editedSach.tenSach !== '', 'is-invalid': editedSach.tenSach.length < 8}">
+                                                <input type="text" class="form-control" name="tenSach" id="tenSach" ng-model="tenSach" ng-class="{'is-valid': tenSach !== '', 'is-invalid': tenSach.length < 8}">
                                                 <div class="invalid-feedback">
                                                     Không được bỏ trống tên sách
                                                 </div>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="sachThuocTheLoai">Thể loại</label>
-                                                <input type="text" class="form-control" name="sachThuocTheLoai" id="sachThuocTheLoai" ng-model="editedSach.sachThuocTheLoai" ng-click="openTheLoai()">
+                                                <input type="text" class="form-control" name="sachThuocTheLoai" id="sachThuocTheLoai" ng-model="sachThuocTheLoai" ng-click="openTheLoai()" ng-class="{'is-valid': sachThuocTheLoai != null, 'is-invalid': sachThuocTheLoai == null}">
                                                 <div class="invalid-feedback">
                                                     Không được bỏ trống thể loại
                                                 </div>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="sachCuaTacGia">Tác giả</label>
-                                                <input type="text" class="form-control" name="sachCuaTacGia" id="sachCuaTacGia" ng-model="editedSach.sachCuaTacGia" ng-click="openTacGia()">
+                                                <input type="text" class="form-control" name="sachCuaTacGia" id="sachCuaTacGia" ng-model="sachCuaTacGia" ng-click="openTacGia()" ng-class="{'is-valid': sachCuaTacGia != null, 'is-invalid': sachCuaTacGia == null}">
                                                 <div class="invalid-feedback">
                                                     Không được bỏ trống tác giả
                                                 </div>
@@ -62,7 +62,7 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label for="ngayXuatBan">Ngày xuất bản</label>
-                                                <input type="date" class="form-control" name="ngayXuatBan" id="ngayXuatBan" ng-model="editedSach.ngayXuatBan" ng-class="{'is-valid': editedSach.ngayXuatBan != null, 'is-invalid': editedSach.ngayXuatBan == null}">
+                                                <input type="date" class="form-control" name="ngayXuatBan" id="ngayXuatBan" ng-model="ngayXuatBan" ng-class="{'is-valid': ngayXuatBan != null, 'is-invalid': ngayXuatBan == null}">
                                                 <div class="invalid-feedback">
                                                     Không được bỏ trống ngày xuất bản
                                                 </div>
@@ -70,25 +70,25 @@
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
                                                     <label for="soTrang">Số trang</label>
-                                                    <input type="number" class="form-control" name="soTrang" id="soTrang" ng-model="editedSach.soTrang">
+                                                    <input type="number" class="form-control" name="soTrang" id="soTrang" ng-model="soTrang" ng-class="{'is-valid': soTrang > 0, 'is-invalid': soTrang < 0}">
                                                     <div class="invalid-feedback">
-                                                        Không được bỏ trống số trang
+                                                        Số trang phải lớn hơn 0
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="soLuong">Số lượng</label>
-                                                    <input type="number" class="form-control" name="soLuong" id="soLuong" ng-model="editedSach.soLuong">
+                                                    <input type="number" class="form-control" name="soLuong" id="soLuong" ng-model="soLuong" ng-class="{'is-valid': soLuong > 0, 'is-invalid': soLuong < 0}">
                                                     <div class="invalid-feedback">
-                                                        Không được bỏ trống số lượng
+                                                        Số lượng phải lớn hơn 0
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label for="donGiaBan">Giá</label>
-                                                <input type="number" class="form-control" name="donGiaBan" id="donGiaBan" ng-model="editedSach.donGiaBan">
+                                                <input type="number" class="form-control" name="donGiaBan" id="donGiaBan" ng-model="donGiaBan" ng-class="{'is-valid': donGiaBan > 0, 'is-invalid': donGiaBan < 0}">
                                                 <div class="invalid-feedback">
-                                                    Không được bỏ trống số trang
+                                                    Đơn gía bán phải lớn 0
                                                 </div>
                                             </div>
                                         </div>
@@ -101,7 +101,7 @@
                                         <div class="col">
                                             <div class="mb-3">
                                                 <label for="tenTheLoai">Tên thể loại</label>
-                                                <input type="text" class="form-control" name="tenTheLoai" id="tenTheLoai" ng-model="editedTheLoai.tenTheLoai" ng-class="{'is-valid': editedTheLoai.tenTheLoai !== '', 'is-invalid': editedTheLoai.tenTheLoai.length < 8}">
+                                                <input type="text" class="form-control" name="tenTheLoai" id="tenTheLoai" ng-model="tenTheLoai" ng-class="{'is-valid': tenTheLoai !== '', 'is-invalid': tenTheLoai.length < 8}">
                                                 <div class="invalid-feedback">
                                                     Không được bỏ trống tên thể loại hoặc tên quá ngắn
                                                 </div>
@@ -116,7 +116,7 @@
                                         <div class="col">
                                             <div class="mb-3">
                                                 <label for="tenTacGia">Tên tác giả</label>
-                                                <input type="text" class="form-control" name="tenTacGia" id="tenTacGia" ng-model="editedTacGia.tenTacGia" ng-class="{'is-valid': editedTacGia.tenTacGia !== '', 'is-invalid': editedTacGia.tenTacGia.length < 8}">
+                                                <input type="text" class="form-control" name="tenTacGia" id="tenTacGia" ng-model="tenTacGia" ng-class="{'is-valid': tenTacGia !== '', 'is-invalid': tenTacGia.length < 8}">
                                                 <div class="invalid-feedback">
                                                     Không được bỏ trống tên tác giả hoặc tên quá ngắn
                                                 </div>
@@ -131,7 +131,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="closeModal()">Đóng</button>
-                <button type="button" class="btn btn-primary" ng-click="saveChanges()">Tạo</button>
+                <button type="button" class="btn btn-primary" ng-click="create()">Tạo</button>
             </div>
         </div>
     </div>
