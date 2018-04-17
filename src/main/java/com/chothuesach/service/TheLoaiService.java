@@ -42,10 +42,10 @@ public class TheLoaiService {
         theLoaiRepository.save(newTheLoai);
     }
 
-    public void changeTenTheLoai(String slug, String newTenTheLoai) {
+    public TheLoai changeTenTheLoai(String slug, String newTenTheLoai) {
         TheLoai theLoai = getTheLoaiBySlug(slug);
         theLoai.setTenTheLoai(newTenTheLoai);
-        theLoaiRepository.save(theLoai);
+        return theLoaiRepository.save(theLoai);
     }
 
     public void deleteTheLoai(String slug) {

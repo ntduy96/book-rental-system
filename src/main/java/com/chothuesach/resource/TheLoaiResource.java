@@ -40,8 +40,8 @@ public class TheLoaiResource {
     }
 
     @PutMapping("/{slug}")
-    public void updateTenTheLoai(@PathVariable String slug, @RequestParam String newTenTheLoai) {
-        theLoaiService.changeTenTheLoai(slug, newTenTheLoai);
+    public TheLoai updateTenTheLoai(@PathVariable String slug, @RequestParam String newTenTheLoai) {
+        return theLoaiService.changeTenTheLoai(slug, newTenTheLoai);
     }
 
     @DeleteMapping("/{slug}")
