@@ -22,6 +22,16 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
         templateUrl : "/html/library-add.html",
         controller: "libraryAddCtrl"
     }).state({
+        name: "library.add.theloai",
+        url: "/theloai",
+        templateUrl : "/html/book-details-theloai.html",
+        controller: "sachDetailTheLoaiCtrl"
+    }).state({
+        name: "library.add.tacgia",
+        url: "/tacgia",
+        templateUrl : "/html/book-details-tacgia.html",
+        controller: "sachDetailTacGiaCtrl"
+    }).state({
         name: "library.book",
         url: "/book",
         templateUrl : "/html/book-management.html",
@@ -65,8 +75,125 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 
 }]);
 
-app.controller("libraryAddCtrl", function ($http, $scope, $cacheFactory) {
+app.controller("libraryAddCtrl", function ($http, $scope, $state, $cacheFactory) {
+    // initialize variables
+    $scope.createSelect = "Sách";
+    $scope.saveSuccess = false;
+    $scope.saveConflict = false;
 
+    $scope.closeModal = function () {
+        $state.go("^", { inherite: true });
+    };
+
+    // open child theloai of a specific book
+    $scope.openTheLoai = function () {
+        $state.go(".theloai", { inherite: true });
+    };
+
+    // open child tacgia of a specific book
+    $scope.openTacGia = function () {
+        $state.go(".tacgia", { inherite: true });
+    };
+
+    document.querySelector(".img-input-thumbnail input").onchange = function () {
+        console.log(this.files[0]);
+        var file = this.files[0];
+        var fileReader = new FileReader();
+        fileReader.onloadend = function (e) {
+            $scope.anhBia = file;
+            document.querySelector(".img-input-thumbnail img").src = "data:image/jpeg;base64," + btoa(e.target.result);
+        };
+        fileReader.readAsBinaryString(file);
+    };
+
+    var resetCacheOf = function (path) {
+        var $httpDefaultCache = $cacheFactory.get("$http");
+        $httpDefaultCache.remove(path);
+    };
+
+    $scope.create = function () {
+        switch ($scope.createSelect) {
+            case "Sách": {
+                var data = {
+                    tenSach: $scope.tenSach,
+                    soLuong: $scope.soLuong,
+                    soTrang: $scope.soTrang,
+                    ngayXuatBan: $scope.ngayXuatBan,
+                    theLoai: $scope.sachThuocTheLoai,
+                    tacGia: $scope.sachCuaTacGia,
+                    donGiaBan: $scope.donGiaBan
+                };
+                console.log(data);
+                $http.post("/api/sach", data).then(function (response) {
+                    if (response.status === 200) {
+                        if ($scope.anhBia !== null) {
+                            var fd = new FormData();
+                            fd.append("anhBia", $scope.anhBia);
+
+                            $http.post("/api/sach/" + response.data.sach.slug + "/anhBia", fd, {
+                                headers: {'Content-Type': undefined },
+                                transformRequest: angular.identity
+                            }).then(function (response) {
+                                resetCacheOf("/api/sach");
+                            });
+                        }
+                        $scope.saveSuccess = true;
+                        $scope.saveConflict = false;
+                    }
+                }).catch(function (response) {
+                    if (response.status === 409) {
+                        $scope.saveConflict = true;
+                    }
+                    if (response.status === 400) {
+                        $scope.saveSuccess = false;
+                    }
+                });
+
+                break;
+            }
+            case "Thể loại": {
+                $http({
+                    method: "POST",
+                    url: "/api/theloai",
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    data: 'tenTheLoai='+$scope.tenTheLoai
+                }).then(function(response) {
+                    console.log(response);
+                    resetCacheOf("api/theloai");
+                    $scope.saveSuccess = true;
+                    $scope.saveConflict = false;
+                }).catch(function (response) {
+                    if (response.status === 409) {
+                        $scope.saveConflict = true;
+                    }
+                    if (response.status === 400) {
+                        $scope.saveSuccess = false;
+                    }
+                });
+                break;
+            }
+            case "Tác giả": {
+                $http({
+                    method: "POST",
+                    url: "/api/tacgia",
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    data: 'tenTacGia='+$scope.tenTacGia
+                }).then(function(response) {
+                    console.log(response);
+                    resetCacheOf("api/tacgia");
+                    $scope.saveSuccess = true;
+                    $scope.saveConflict = false;
+                }).catch(function (response) {
+                    if (response.status === 409) {
+                        $scope.saveConflict = true;
+                    }
+                    if (response.status === 400) {
+                        $scope.saveSuccess = false;
+                    }
+                });
+            }
+        }
+    };
 });
 
 app.controller("sachCtrl", function ($http, $scope, $cacheFactory) {
@@ -253,7 +380,12 @@ app.controller("sachDetailTheLoaiCtrl", function ($http, $scope, $stateParams, $
     // save all selected the loai and go back to parent state
     $scope.completeAction = function () {
         var tenTheLoaiArray = Array.from(document.querySelectorAll("[type='checkbox'][name= 'sachThuocTheLoai']:checked")).map(function (input) { return input.value; });
-        $scope.$parent.editedSach.sachThuocTheLoai = tenTheLoaiArray;
+        if ($scope.$parent.editedSach) {
+            $scope.$parent.editedSach.sachThuocTheLoai = tenTheLoaiArray;
+        } else {
+            $scope.$parent.sachThuocTheLoai = tenTheLoaiArray;
+        }
+
         $state.go("^", { inherite: true });
     };
 
@@ -300,7 +432,12 @@ app.controller("sachDetailTacGiaCtrl", function ($http, $scope, $stateParams, $s
     // save all selected the loai and go back to parent state
     $scope.completeAction = function () {
         var tenTacGiaArray = Array.from(document.querySelectorAll("[type='checkbox'][name= 'sachCuaTacGia']:checked")).map(function (input) { return input.value; });
-        $scope.$parent.editedSach.sachCuaTacGia = tenTacGiaArray;
+        if ($scope.$parent.editedSach) {
+            $scope.$parent.editedSach.sachCuaTacGia = tenTacGiaArray;
+        } else {
+            $scope.$parent.sachCuaTacGia = tenTacGiaArray;
+        }
+
         $state.go("^", { inherite: true });
     };
 
