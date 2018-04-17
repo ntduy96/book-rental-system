@@ -17,6 +17,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
         url: "/library",
         templateUrl : "/html/library-management.html"
     }).state({
+        name: "library.add",
+        url: "/add",
+        templateUrl : "/html/library-add.html",
+        controller: "libraryAddCtrl"
+    }).state({
         name: "library.book",
         url: "/book",
         templateUrl : "/html/book-management.html",
@@ -60,6 +65,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 
 }]);
 
+app.controller("libraryAddCtrl", function ($http, $scope, $cacheFactory) {
+
+});
+
 app.controller("sachCtrl", function ($http, $scope, $cacheFactory) {
     $scope.fetchSachs = function () {
         $http.get("/api/sach", { cache: true })
@@ -83,13 +92,17 @@ app.controller("sachDetailCtrl", function ($http, $scope, $stateParams, $state, 
     $scope.fetchSachDetail = function () {
         $http.get("/api/sach/" + $stateParams.slug, { cache: true })
             .then(function(response) {
-                $scope.originalSach = {};
-                $scope.originalSach = Object.assign({}, response.data);
-                $scope.originalSach.sachThuocTheLoai = response.data.sachThuocTheLoai.map(function (theLoai) { return theLoai.tenTheLoai; });
-                $scope.originalSach.sachCuaTacGia = response.data.sachCuaTacGia.map(function (tacGia) { return tacGia.tenTacGia; });
-                $scope.originalSach.ngayXuatBan = new Date(response.data.ngayXuatBan);
-                $scope.originalSach.ngayTao = new Date(response.data.ngayTao);
-                $scope.editedSach = Object.assign({}, $scope.originalSach);
+                $http.get("/api/sach/" + $stateParams.slug + "/prices/latest")
+                    .then(function (value) {
+                        $scope.originalSach = {};
+                        $scope.originalSach = Object.assign({}, response.data);
+                        $scope.originalSach.sachThuocTheLoai = response.data.sachThuocTheLoai.map(function (theLoai) { return theLoai.tenTheLoai; });
+                        $scope.originalSach.sachCuaTacGia = response.data.sachCuaTacGia.map(function (tacGia) { return tacGia.tenTacGia; });
+                        $scope.originalSach.ngayXuatBan = new Date(response.data.ngayXuatBan);
+                        $scope.originalSach.ngayTao = new Date(response.data.ngayTao);
+                        $scope.originalSach.donGiaBan = value.data.donGia;
+                        $scope.editedSach = Object.assign({}, $scope.originalSach);
+                    });
             });
     };
     $scope.fetchSachDetail();
@@ -165,16 +178,20 @@ app.controller("sachDetailCtrl", function ($http, $scope, $stateParams, $state, 
             console.log(changes);
             $http.put("/api/sach/" + $stateParams.slug, changes)
                 .then(function (response) {
-                    $scope.resetCacheOfSachDetail();
-                    $scope.originalSach = {};
-                    $scope.originalSach = Object.assign({}, response.data.sach);
-                    $scope.originalSach.sachThuocTheLoai = response.data.sach.sachThuocTheLoai.map(function (theLoai) { return theLoai.tenTheLoai; });
-                    $scope.originalSach.sachCuaTacGia = response.data.sach.sachCuaTacGia.map(function (tacGia) { return tacGia.tenTacGia; });
-                    $scope.originalSach.ngayXuatBan = new Date(response.data.sach.ngayXuatBan);
-                    $scope.originalSach.ngayTao = new Date(response.data.sach.ngayTao);
-                    $scope.editedSach = Object.assign({}, $scope.originalSach);
-                    $scope.$parent.resetCacheOfSach();
-                    $scope.$parent.fetchSachs();
+                    $http.get("/api/sach/" + $stateParams.slug + "/prices/latest")
+                        .then(function (value) {
+                            $scope.resetCacheOfSachDetail();
+                            $scope.originalSach = {};
+                            $scope.originalSach = Object.assign({}, response.data.sach);
+                            $scope.originalSach.sachThuocTheLoai = response.data.sach.sachThuocTheLoai.map(function (theLoai) { return theLoai.tenTheLoai; });
+                            $scope.originalSach.sachCuaTacGia = response.data.sach.sachCuaTacGia.map(function (tacGia) { return tacGia.tenTacGia; });
+                            $scope.originalSach.ngayXuatBan = new Date(response.data.sach.ngayXuatBan);
+                            $scope.originalSach.ngayTao = new Date(response.data.sach.ngayTao);
+                            $scope.originalSach.donGiaBan = value.data.donGia;
+                            $scope.editedSach = Object.assign({}, $scope.originalSach);
+                            $scope.$parent.resetCacheOfSach();
+                            $scope.$parent.fetchSachs();
+                        });
                 });
         }
 
