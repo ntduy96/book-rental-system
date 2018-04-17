@@ -22,6 +22,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private MyUserDetailsService userDetailsService;
+
+	@Autowired
+	private MySimpleUrlAuthenticationSuccessHandler mySimpleUrlAuthenticationSuccessHandler;
 	
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {
@@ -59,6 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .formLogin()
                 .loginPage("/login")
+				.successHandler(mySimpleUrlAuthenticationSuccessHandler)
                 .permitAll()
                 .and()
                 .exceptionHandling().accessDeniedPage("/403")
