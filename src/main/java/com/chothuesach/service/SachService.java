@@ -4,12 +4,10 @@ import com.chothuesach.config.AwsS3Config;
 import com.chothuesach.dto.SachDto;
 import com.chothuesach.dto.SachUpdateDto;
 import com.chothuesach.exception.BookTitleExistsException;
-import com.chothuesach.model.DonGiaBan;
-import com.chothuesach.model.Sach;
-import com.chothuesach.model.TacGia;
-import com.chothuesach.model.TheLoai;
+import com.chothuesach.model.*;
 import com.chothuesach.repository.DonGiaBanRepository;
 import com.chothuesach.repository.SachRepository;
+import com.chothuesach.repository.ThoiDiemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +33,9 @@ public class SachService {
 
 	@Autowired
     private DonGiaBanRepository donGiaBanRepository;
+
+	@Autowired
+	private ThoiDiemRepository thoiDiemRepository;
 	
 	public Page<Sach> getAllSach(Pageable pageable) {
 		return sachRepository.findAll(pageable);
@@ -77,8 +78,9 @@ public class SachService {
 			newSach.setSoTrang(sachDto.getSoTrang());
 			newSach.setSachThuocTheLoai(mapTheLoai(new HashSet<>(), sachDto.getTheLoai()));
 			newSach.setSachCuaTacGia(mapTacGia(new HashSet<>(), sachDto.getTacGia()));
-			newSach.setDonGiaBan(mapDonGiaBan(new HashSet<>(), sachDto.getDonGiaBan()));
-			return sachRepository.save(newSach);
+			Sach saved = sachRepository.save(newSach);
+			saved.setDonGiaBan(mapDonGiaBan(saved, new HashSet<>(), sachDto.getDonGiaBan()));
+			return sachRepository.save(saved);
 		}
 	}
 
@@ -115,7 +117,7 @@ public class SachService {
                 sach.setSachCuaTacGia(mapTacGia(sach.getSachCuaTacGia(), newTacGia));
             }
             if (newDonGiaBan != null) {
-                sach.setDonGiaBan(mapDonGiaBan(sach.getDonGiaBan(), newDonGiaBan));
+                sach.setDonGiaBan(mapDonGiaBan(sach, sach.getDonGiaBan(), newDonGiaBan));
             }
 
             return sachRepository.save(sach);
@@ -174,10 +176,18 @@ public class SachService {
 		return tacGias;
 	}
 	
-	private Collection<DonGiaBan> mapDonGiaBan(Collection<DonGiaBan> donGiaBans, Double donGiaBan) {
+	private Collection<DonGiaBan> mapDonGiaBan(Sach sach, Collection<DonGiaBan> donGiaBans, Double donGiaBan) {
 		DonGiaBan newDonGiaBan = new DonGiaBan();
 		newDonGiaBan.setDonGia(donGiaBan);
-		donGiaBans.add(newDonGiaBan);
+		newDonGiaBan.setSach(sach);
+		DonGiaBanId donGiaBanId = new DonGiaBanId();
+		donGiaBanId.setMaSach(sach.getMaSach());
+		ThoiDiem thoiDiem = thoiDiemRepository.save(new ThoiDiem());
+		donGiaBanId.setThoiGian(thoiDiem.getThoiGian());
+		newDonGiaBan.setDonGiaBanId(donGiaBanId);
+		newDonGiaBan.setThoiDiem(thoiDiem);
+		DonGiaBan savedDonGiaBan = donGiaBanRepository.save(newDonGiaBan);
+		donGiaBans.add(savedDonGiaBan);
 		return donGiaBans;
 	}
 

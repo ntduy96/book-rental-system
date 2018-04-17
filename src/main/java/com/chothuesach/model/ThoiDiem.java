@@ -9,7 +9,9 @@ import org.hibernate.annotations.FetchMode;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Iterator;
 
 @Entity
@@ -19,12 +21,25 @@ public class ThoiDiem implements Serializable {
 
 	@Id
 	@JsonView(SachView.Detailed.class)
-	public java.util.Date thoiGian;
+	private java.util.Date thoiGian;
 
 	@OneToMany(mappedBy="thoiDiem")
 	@Fetch(FetchMode.JOIN)
 	@JsonIgnore
 	public java.util.Collection<DonGiaBan> donGiaBan;
+
+	@PrePersist
+	protected void onCreate() {
+		this.thoiGian = new Date();
+	}
+
+	public Date getThoiGian() {
+		return thoiGian;
+	}
+
+	public void setThoiGian(Date thoiGian) {
+		this.thoiGian = thoiGian;
+	}
 
 	/** @pdGenerated default getter */
 	public java.util.Collection<DonGiaBan> getDonGiaBan() {
