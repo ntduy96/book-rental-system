@@ -33,7 +33,7 @@ public class NhanVien extends NguoiDung {
 
 	@ManyToOne
 	@JoinColumn(name = "MA_CHUC_VU")
-	@JsonView(NhanVienView.Detailed.class)
+	@JsonView({NhanVienView.Overview.class, NhanVienView.Detailed.class})
     private ChucVu chucVu;
 
 	/** @pdGenerated default getter */
