@@ -21,7 +21,7 @@ public class AuthorIdGenerator implements IdentifierGenerator {
         String maTacGia = new String(Hex.encode(KeyGenerators.secureRandom(12 / 2).generateKey()));
         PreparedStatement p;
         try {
-            p = conn.prepareStatement("SELECT MA_TAC_GIA FROM SACH WHERE MA_TAC_GIA = ?");
+            p = conn.prepareStatement("SELECT MA_TAC_GIA FROM TAC_GIA WHERE MA_TAC_GIA = ?");
             p.setString(1, maTacGia);
             ResultSet rs = p.executeQuery();
             if (!rs.next()) {
