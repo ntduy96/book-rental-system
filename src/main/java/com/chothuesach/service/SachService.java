@@ -4,6 +4,7 @@ import com.chothuesach.config.AwsS3Config;
 import com.chothuesach.dto.SachDto;
 import com.chothuesach.dto.SachUpdateDto;
 import com.chothuesach.exception.BookTitleExistsException;
+import com.chothuesach.exception.ResourceConflictException;
 import com.chothuesach.model.*;
 import com.chothuesach.repository.DonGiaBanRepository;
 import com.chothuesach.repository.SachRepository;
@@ -68,7 +69,7 @@ public class SachService {
 	
 	public Sach createNewSach(SachDto sachDto) {
 		if (tenSachExist(sachDto.getTenSach())) {
-			throw new BookTitleExistsException(sachDto.getTenSach());
+			throw new ResourceConflictException(sachDto.getTenSach());
 		} else {
 			Sach newSach = new Sach();
 			newSach.setTenSach(sachDto.getTenSach());
@@ -78,8 +79,9 @@ public class SachService {
 			newSach.setSoTrang(sachDto.getSoTrang());
 			newSach.setSachThuocTheLoai(mapTheLoai(new HashSet<>(), sachDto.getTheLoai()));
 			newSach.setSachCuaTacGia(mapTacGia(new HashSet<>(), sachDto.getTacGia()));
-			Sach saved = sachRepository.save(newSach);
-			saved.setDonGiaBan(mapDonGiaBan(saved, new HashSet<>(), sachDto.getDonGiaBan()));
+			sachRepository.save(newSach);
+			Sach saved = sachRepository.findOneByTenSach(sachDto.getTenSach());
+			mapDonGiaBan(saved, sachDto.getDonGiaBan());
 			return sachRepository.save(saved);
 		}
 	}
@@ -117,7 +119,7 @@ public class SachService {
                 sach.setSachCuaTacGia(mapTacGia(sach.getSachCuaTacGia(), newTacGia));
             }
             if (newDonGiaBan != null) {
-                sach.setDonGiaBan(mapDonGiaBan(sach, sach.getDonGiaBan(), newDonGiaBan));
+                mapDonGiaBan(sach, newDonGiaBan);
             }
 
             return sachRepository.save(sach);
@@ -176,7 +178,7 @@ public class SachService {
 		return tacGias;
 	}
 	
-	private Collection<DonGiaBan> mapDonGiaBan(Sach sach, Collection<DonGiaBan> donGiaBans, Double donGiaBan) {
+	private void mapDonGiaBan(Sach sach, Double donGiaBan) {
 		DonGiaBan newDonGiaBan = new DonGiaBan();
 		newDonGiaBan.setDonGia(donGiaBan);
 		newDonGiaBan.setSach(sach);
@@ -187,8 +189,7 @@ public class SachService {
 		newDonGiaBan.setDonGiaBanId(donGiaBanId);
 		newDonGiaBan.setThoiDiem(thoiDiem);
 		DonGiaBan savedDonGiaBan = donGiaBanRepository.save(newDonGiaBan);
-		donGiaBans.add(savedDonGiaBan);
-		return donGiaBans;
+		sach.getDonGiaBan().add(savedDonGiaBan);
 	}
 
 }
