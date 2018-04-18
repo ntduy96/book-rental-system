@@ -18,15 +18,31 @@ public class ChucVu implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonView({ChucVuView.Overview.class, NhanVienView.Detailed.class})
-	public Short maChucVu;
+	private Short maChucVu;
 
 	@NotNull
-	@JsonView({ChucVuView.Overview.class, NhanVienView.Detailed.class})
-	public String tenChucVu;
+	@JsonView({ChucVuView.Overview.class, NhanVienView.Overview.class, NhanVienView.Detailed.class})
+	private String tenChucVu;
 
 	@OneToMany(mappedBy = "chucVu")
 	@JsonView(ChucVuView.Detailed.class)
-	public Collection<NhanVien> nhanVien;
+	private Collection<NhanVien> nhanVien;
+
+	public Short getMaChucVu() {
+		return maChucVu;
+	}
+
+	public void setMaChucVu(Short maChucVu) {
+		this.maChucVu = maChucVu;
+	}
+
+	public String getTenChucVu() {
+		return tenChucVu;
+	}
+
+	public void setTenChucVu(String tenChucVu) {
+		this.tenChucVu = tenChucVu;
+	}
 
 	/** @pdGenerated default getter */
 	public Collection<NhanVien> getNhanVien() {
