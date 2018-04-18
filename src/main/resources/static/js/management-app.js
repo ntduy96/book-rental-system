@@ -71,6 +71,20 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
         url: "/:slug",
         templateUrl : "/html/category-details.html",
         controller: "theLoaiDetailCtrl"
+    }).state({
+        name: "employees",
+        url: "/employees",
+        templateUrl : "/html/employee-management.html"
+    }).state({
+        name: "employees.all",
+        url: "/all",
+        templateUrl : "/html/employee-all.html",
+        controller: "employeeCtrl"
+    }).state({
+        name: "employees.detail",
+        url: "/:tenNhanVien",
+        templateUrl : "/html/employee-detail.html",
+        controller: "employeeDetailCtrl"
     });
 
 }]);
@@ -82,7 +96,7 @@ app.controller("libraryAddCtrl", function ($http, $scope, $state, $cacheFactory)
     $scope.saveConflict = false;
 
     $scope.closeModal = function () {
-        $state.go("^", { inherite: true });
+        $state.go("^.book", { inherite: true });
     };
 
     // open child theloai of a specific book
