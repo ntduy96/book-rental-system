@@ -25,10 +25,10 @@ public class ChucVuResource {
         return chucVuService.getAllChucVu();
     }
 
-    @GetMapping("/{tenChucVu}")
+    @GetMapping("/{maChucVu}")
     @JsonView(ChucVuView.Detailed.class)
-    public ChucVu getChucVuByTenChucVu(@PathVariable String tenChucVu) {
-        return chucVuService.getByTenChucVu(tenChucVu);
+    public ChucVu getChucVuByMaChucVu(@PathVariable Short maChucVu) {
+        return chucVuService.getByMaChucVu(maChucVu);
     }
 
 }
