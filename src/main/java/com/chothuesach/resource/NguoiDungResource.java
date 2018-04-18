@@ -36,6 +36,11 @@ public class NguoiDungResource {
 		nguoiDungService.setAnhDaiDien(principal.getName(), file);
 	}
 
+	@PostMapping("/{tenNguoiDung}/anhDaiDien")
+	public void changeAnhDaiDien(@PathVariable String tenNguoiDung, @RequestParam("anhDaiDien") MultipartFile file) {
+		nguoiDungService.setAnhDaiDien(tenNguoiDung, file);
+	}
+
 	private HashMap<String, Boolean> tenNguoiDungExistenceCheck(
 			@RequestParam(name = "ten-nguoi-dung") String tenNguoiDung) {
 		Boolean isExisted = nguoiDungService.tenNguoiDungExist(tenNguoiDung);
