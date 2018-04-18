@@ -1,8 +1,10 @@
 package com.chothuesach.service;
 
 import com.chothuesach.dto.NhanVienDto;
+import com.chothuesach.dto.NhanVienUpdateDto;
 import com.chothuesach.exception.EmailExistsException;
 import com.chothuesach.exception.ResourceNotFoundException;
+import com.chothuesach.model.ChucVu;
 import com.chothuesach.model.NhanVien;
 import com.chothuesach.model.Role;
 import com.chothuesach.repository.NhanVienRepository;
@@ -76,23 +78,74 @@ public class NhanVienService {
         }
     }
 
-    public void addRole(String maNhanVien, String roleName) {
-        NhanVien nhanVien = getByMaNhanVien(maNhanVien);
+    public NhanVien updateNhanVien(String tenNguoiDung, NhanVienUpdateDto nhanVienUpdateDto) {
+        NhanVien nhanVien = getByTenNguoiDung(tenNguoiDung);
+
+        String newTenNguoiDung = nhanVienUpdateDto.getTenNguoiDung();
+        String newHoTenNguoiDung = nhanVienUpdateDto.getHoTenNguoiDung();
+        String newEmail = nhanVienUpdateDto.getEmail();
+        String newSoCmnd = nhanVienUpdateDto.getSoCmnd();
+        Short newMaChucVu = nhanVienUpdateDto.getMaChucVu();
+        String newDiaChiNguoiDung = nhanVienUpdateDto.getDiaChiNguoiDung();
+        String newPassword = nhanVienUpdateDto.getPassword();
+        String newConfirmPassword = nhanVienUpdateDto.getConfirmPassword();
+
+        if (newTenNguoiDung != null) {
+            nhanVien.setTenNguoiDung(newTenNguoiDung);
+        }
+        if (newHoTenNguoiDung != null) {
+            nhanVien.setHoTenNguoiDung(newHoTenNguoiDung);
+        }
+        if (newEmail != null) {
+            nhanVien.setEmail(newEmail);
+        }
+        if (newSoCmnd != null) {
+            nhanVien.setSoCmnd(newSoCmnd);
+        }
+        if (newMaChucVu != null) {
+            ChucVu newChucVu = chucVuService.getByMaChucVu(newMaChucVu);
+            if (newChucVu.getTenChucVu().equals("Nhân viên bán hàng")) {
+                Collection<Role> roles = nhanVien.getRoles();
+                roles.remove(roles);
+                roles.add(roleRepository.findOneByRoleName("ROLE_STAFF"));
+                roles.add(roleRepository.findOneByRoleName("ROLE_USER"));
+                nhanVien.setRoles(roles);
+            }
+            if (newChucVu.getTenChucVu().equals("Nhân viên quản lý")) {
+                Collection<Role> roles = nhanVien.getRoles();
+                roles.remove(roles);
+                roles.add(roleRepository.findOneByRoleName("ROLE_ADMIN"));
+                roles.add(roleRepository.findOneByRoleName("ROLE_USER"));
+                nhanVien.setRoles(roles);
+            }
+            nhanVien.setChucVu(newChucVu);
+        }
+        if (newDiaChiNguoiDung != null) {
+            nhanVien.setDiaChiNguoiDung(newDiaChiNguoiDung);
+        }
+        if (newPassword != null && newConfirmPassword != null && newConfirmPassword.equals(newPassword)) {
+            nhanVien.setPassword(passwordEncoder.encode(newPassword));
+        }
+        return nhanVienRepository.save(nhanVien);
+    }
+
+    public void addRole(String tenNhanVien, String roleName) {
+        NhanVien nhanVien = getByTenNguoiDung(tenNhanVien);
         Set<Role> roles = (Set<Role>) nhanVien.getRoles();
         roles.add(roleRepository.findOneByRoleName(roleName));
         nhanVienRepository.save(nhanVien);
     }
 
-    public void removeRole(String maNhanVien, String roleName) {
-        NhanVien nhanVien = getByMaNhanVien(maNhanVien);
+    public void removeRole(String tenNhanVien, String roleName) {
+        NhanVien nhanVien = getByTenNguoiDung(tenNhanVien);
         Collection<Role> roles = nhanVien.getRoles();
         roles.remove(roleRepository.findOneByRoleName(roleName));
         nhanVienRepository.save(nhanVien);
     }
 
-    public void deleteNhanVien(String maNhanVien) {
-        removeRole(maNhanVien, "ROLE_STAFF");
-        NhanVien nhanVien = getByMaNhanVien(maNhanVien);
+    public void deleteNhanVien(String tenNhanVien) {
+        removeRole(tenNhanVien, "ROLE_STAFF");
+        NhanVien nhanVien = getByTenNguoiDung(tenNhanVien);
         nhanVienRepository.delete(nhanVien);
     }
 
