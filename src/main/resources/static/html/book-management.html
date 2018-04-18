@@ -29,8 +29,9 @@
             <div ng-repeat="sach in sachList" class="col-md-4 col-lg-3">
                 <div class="card mb-4 box-shadow">
                     <img ng-src="{{sach.anhBia != null ? sach.anhBia : 'http://via.placeholder.com/240x320'}}" alt="thumbnail" width="100%">
-                    <div class="card-body">
-                        <p class="card-text text-center">{{sach.maSach}}</p>
+                    <div class="card-body text-center">
+                        <p class="card-text text-center badge">{{sach.maSach}}</p>
+                        <p class="card-text text-center">{{sach.tenSach}}</p>
                         <div class="align-items-center d-flex justify-content-center">
                             <div class="btn-group">
                                 <a class="btn btn-sm btn-outline-secondary" ui-sref="library.book.detail({ slug: sach.slug })">Xem</a>
