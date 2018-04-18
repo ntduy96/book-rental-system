@@ -1,5 +1,6 @@
 package com.chothuesach.service;
 
+import com.chothuesach.exception.ResourceConflictException;
 import com.chothuesach.exception.ResourceNotFoundException;
 import com.chothuesach.model.TacGia;
 import com.chothuesach.repository.TacGiaRepository;
@@ -31,6 +32,9 @@ public class TacGiaService {
     }
 
     public void addNewTacGia(String tenTacGia) {
+        if (tacGiaRepository.getByTenTacGia(tenTacGia).isPresent()) {
+            throw new ResourceConflictException("Tác giả " + tenTacGia + " đã tồn tại");
+        }
         TacGia newTacGia = new TacGia();
         newTacGia.setTenTacGia(tenTacGia);
         tacGiaRepository.save(newTacGia);
