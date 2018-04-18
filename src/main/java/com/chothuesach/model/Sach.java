@@ -62,6 +62,7 @@ public class Sach implements Serializable {
 	@OrderBy("THOI_GIAN DESC")
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@JsonView(SachView.CurrentPrice.class)
+	@Immutable
 	private Collection<DonGiaBan> donGiaBan;
 	
 	@OneToMany(mappedBy="sach")
@@ -83,6 +84,7 @@ public class Sach implements Serializable {
 //	@JsonIgnore
 	@JsonView(SachView.Detailed.class)
 	@JsonManagedReference
+	@Immutable
 	private Collection<TheLoai> sachThuocTheLoai;
 	
 	@ManyToMany(fetch=FetchType.LAZY)
@@ -93,6 +95,7 @@ public class Sach implements Serializable {
 	)
 //	@JsonIgnore
 	@JsonView(SachView.Detailed.class)
+	@Immutable
 	private Collection<TacGia> sachCuaTacGia;
 	
 	@PrePersist
