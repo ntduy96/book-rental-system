@@ -1,33 +1,20 @@
 package com.chothuesach.model;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
 import com.chothuesach.jsonview.ChucVuView;
 import com.chothuesach.jsonview.HoaDonView;
 import com.chothuesach.jsonview.NguoiDungView;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Iterator;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -78,6 +65,7 @@ public class NguoiDung implements Serializable {
 
 	// @OneToMany(mappedBy = "tenNguoiDung", cascade = CascadeType.ALL, fetch =
 	// FetchType.EAGER)
+	@JsonView(NguoiDungView.Detailed.class)
 	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
 	@JoinTable(name = "NGUOI_DUNG_ROLE", joinColumns = {
 			@JoinColumn(name = "TEN_NGUOI_DUNG", referencedColumnName = "tenNguoiDung") }, inverseJoinColumns = {
@@ -96,7 +84,7 @@ public class NguoiDung implements Serializable {
 		return roles;
 	}
 
-	public void setRoles(Set<Role> roles) {
+	public void setRoles(Collection<Role> roles) {
 		this.roles = roles;
 	}
 
