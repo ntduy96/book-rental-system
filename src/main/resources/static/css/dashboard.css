@@ -137,3 +137,52 @@ body {
     max-height: calc(100% - (68px * 2));
     overflow: scroll;
 }
+
+/*
+ * Image input thumbnail
+ */
+.img-input-thumbnail {
+    min-height: 353px;
+    border-radius: 6px;
+    position: relative;
+}
+
+.img-input-thumbnail p {
+    position: absolute;
+    top: calc((100%/2) - 10px);
+    text-align: center;
+    width: 100%;
+}
+
+.img-input-thumbnail .img-thumbnail {
+    padding: .25rem;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
+    max-width: 100%;
+    /*height: auto;*/
+}
+
+.img-input-thumbnail input[type="file"] {
+    height: 100%;
+    border: 2px dashed #dedede;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+}
+
+/**
+ * Avatar
+ */
+
+.avatar {
+    display: inline-block;
+    left: calc(-80px + 50%);
+    min-height: auto;
+}
+
+.avatar img {
+    height: 160px;
+    width: 160px;
+    object-fit: cover;
+}
