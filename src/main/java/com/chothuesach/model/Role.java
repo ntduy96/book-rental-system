@@ -22,10 +22,10 @@ public class Role implements Serializable {
 	private String roleName;
 
 	@NotNull
-//	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//	@JoinColumn(name = "TEN_NGUOI_DUNG")
-	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,
-			CascadeType.MERGE }, mappedBy = "roles")
+	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+	@JoinTable(name = "NGUOI_DUNG_ROLE", joinColumns = {
+			@JoinColumn(name = "ROLE_ID", referencedColumnName = "roleId") }, inverseJoinColumns = {
+			@JoinColumn(name = "TEN_NGUOI_DUNG", referencedColumnName = "tenNguoiDung") })
 	private Collection<NguoiDung> nguoiDungs;
 
 	public Long getRoleId() {
