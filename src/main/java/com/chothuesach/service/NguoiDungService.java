@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -70,7 +71,7 @@ public class NguoiDungService {
 	}
 
 	public boolean emailExist(String email) {
-		return nguoiDungRepository.findOneByEmail(email) != null;
+		return nguoiDungRepository.findOneByEmail(email).isPresent();
 	}
 	
 	public boolean tenNguoiDungExist(String tenNguoiDung) {
@@ -100,6 +101,15 @@ public class NguoiDungService {
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void deleteNguoiDung(String tenNguoiDung) {
+		NguoiDung nguoiDung = getOneByUsername(tenNguoiDung);
+		Collection<Role> roles = nguoiDung.getRoles();
+		roles.clear();
+		nguoiDung.setRoles(roles);
+		NguoiDung saved = nguoiDungRepository.save(nguoiDung);
+		nguoiDungRepository.delete(saved);
 	}
 
 }
