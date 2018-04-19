@@ -1,0 +1,104 @@
+<div class="modal fade show" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModal">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Tạo mới</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form novalidate id="nhanVienForm" name="nhanVienForm" ng-submit="create(nhanVienForm.$valid)" >
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col">
+                                <div class="alert alert-success" role="alert" ng-show="saveSuccess">
+                                    Đã tạo thành công
+                                </div>
+                                <div class="alert alert-warning" role="alert" ng-show="saveConflict">
+                                    Không thể tạo mới vì đã tồn tại
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="bg-light img-input-thumbnail avatar rounded-circle">
+                                        <img class="img-thumbnail input-figure rounded-circle" ng-src="{{editedNhanVien.anhDaiDien != null ? editedNhanVien.anhDaiDien : ''}}">
+                                        <input type="file" class="form-control" name="anhDaiDien" id="anhDaiDien" ng-model="editedNhanVien.anhDaiDien">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" name="email" id="email" ng-model="editedNhanVien.email" ng-class="{'is-valid': fieldErrors.email.length == 0 && nhanVienForm.email.$dirty, 'is-invalid': fieldErrors.email.length != 0 && nhanVienForm.email.$dirty}" ng-keyup="checkEmail()" required>
+                                    <div class="invalid-feedback">
+                                        {{fieldErrors.email.join(", ")}}
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="tenNguoiDung">Tên người dùng</label>
+                                    <input type="text" class="form-control" name="tenNguoiDung" id="tenNguoiDung" ng-model="editedNhanVien.tenNguoiDung" ng-class="{'is-valid': fieldErrors.tenNguoiDung.length == 0 && nhanVienForm.tenNguoiDung.$dirty, 'is-invalid': fieldErrors.tenNguoiDung.length != 0 && nhanVienForm.tenNguoiDung.$dirty}" ng-keyup="checkTenNguoiDung()" required>
+                                    <div class="invalid-feedback">
+                                        {{fieldErrors.tenNguoiDung.join(", ")}}
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="hoTenNguoiDung">Họ tên người dùng</label>
+                                    <input type="text" class="form-control" name="hoTenNguoiDung" id="hoTenNguoiDung" ng-model="editedNhanVien.hoTenNguoiDung" ng-class="{'is-valid': fieldErrors.hoTenNguoiDung.length == 0 && nhanVienForm.hoTenNguoiDung.$dirty, 'is-invalid': fieldErrors.hoTenNguoiDung.length != 0 && nhanVienForm.hoTenNguoiDung.$dirty}" ng-keyup="checkHoTenNguoiDung()" required>
+                                    <div class="invalid-feedback">
+                                        {{fieldErrors.hoTenNguoiDung.join(", ")}}
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="chucVu">Chức vụ</label>
+                                    <select class="form-control" name="chucVu" id="chucVu" ng-model="editedNhanVien.maChucVu" ng-class="{'is-valid': fieldErrors.maChucVu.length == 0 && nhanVienForm.maChucVu.$dirty, 'is-invalid': fieldErrors.maChucVu.length != 0 && nhanVienForm.maChucVu.$dirty}" ng-change="checkChucVu()" required>
+                                        <option ng-repeat="chucVu in chucVus" id="{{chucVu.maChucVu}}" value="{{chucVu.maChucVu}}">{{chucVu.tenChucVu}}</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        {{fieldErrors.chucVu.join(", ")}}
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="diaChiNguoiDung">Địa chỉ</label>
+                                    <input type="text" class="form-control" name="diaChiNguoiDung" id="diaChiNguoiDung" ng-model="editedNhanVien.diaChiNguoiDung" ng-class="{'is-valid': fieldErrors.diaChiNguoiDung.length == 0 && nhanVienForm.diaChiNguoiDung.$dirty, 'is-invalid': fieldErrors.diaChiNguoiDung.length != 0 && nhanVienForm.diaChiNguoiDung.$dirty}" ng-keyup="checkDiaChiNguoiDung()" required>
+                                    <div class="invalid-feedback">
+                                        {{fieldErrors.diaChiNguoiDung.join(", ")}}
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="soCmnd">Số CMND</label>
+                                    <input type="text" class="form-control" name="soCmnd" id="soCmnd" ng-model="editedNhanVien.soCmnd" ng-class="{'is-valid': fieldErrors.soCmnd.length == 0 && nhanVienForm.soCmnd.$dirty, 'is-invalid': fieldErrors.soCmnd.length != 0 && nhanVienForm.soCmnd.$dirty}" ng-keyup="checkSoCmnd()" required>
+                                    <div class="invalid-feedback">
+                                        {{fieldErrors.soCmnd.join(", ")}}
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="password">Mật khẩu</label>
+                                    <input type="password" class="form-control" name="password" id="password" ng-model="editedNhanVien.password" ng-class="{'is-valid': fieldErrors.password.length == 0 && nhanVienForm.password.$dirty, 'is-invalid': fieldErrors.password.length != 0 && nhanVienForm.password.$dirty}" ng-keyup="checkPassword()" placeholder="••••••••••" required>
+                                    <div class="invalid-feedback">
+                                        {{fieldErrors.password.join(", ")}}
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="confirmPassword">Xác nhận lại mật khẩu</label>
+                                    <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" ng-model="editedNhanVien.confirmPassword" ng-class="{'is-valid': fieldErrors.confirmPassword.length == 0 && nhanVienForm.confirmPassword.$dirty, 'is-invalid': fieldErrors.confirmPassword.length != 0 && nhanVienForm.confirmPassword.$dirty}" ng-keyup="checkConfirmPassword()" placeholder="••••••••••" required>
+                                    <div class="invalid-feedback">
+                                        {{fieldErrors.confirmPassword.join(", ")}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="closeModal()">Đóng</button>
+                <button type="submit" class="btn btn-primary" form="nhanVienForm" ng-disabled="!isValid() && nhanVienForm.$invalid">Tạo</button>
+            </div>
+        </div>
+    </div>
+</div>
