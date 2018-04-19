@@ -104,16 +104,17 @@ public class NhanVienService {
         }
         if (newMaChucVu != null) {
             ChucVu newChucVu = chucVuService.getByMaChucVu(newMaChucVu);
+            Collection<Role> roles = nhanVien.getRoles();
+            roles.clear();
+            nhanVien.setRoles(roles);
+            nhanVien = nhanVienRepository.save(nhanVien);
+            roles = nhanVien.getRoles();
             if (newChucVu.getTenChucVu().equals("Nhân viên bán hàng")) {
-                Collection<Role> roles = nhanVien.getRoles();
-                roles.remove(roles);
                 roles.add(roleRepository.findOneByRoleName("ROLE_STAFF"));
                 roles.add(roleRepository.findOneByRoleName("ROLE_USER"));
                 nhanVien.setRoles(roles);
             }
             if (newChucVu.getTenChucVu().equals("Nhân viên quản lý")) {
-                Collection<Role> roles = nhanVien.getRoles();
-                roles.remove(roles);
                 roles.add(roleRepository.findOneByRoleName("ROLE_ADMIN"));
                 roles.add(roleRepository.findOneByRoleName("ROLE_USER"));
                 nhanVien.setRoles(roles);
@@ -144,9 +145,15 @@ public class NhanVienService {
     }
 
     public void deleteNhanVien(String tenNhanVien) {
-        removeRole(tenNhanVien, "ROLE_STAFF");
+//        removeRole(tenNhanVien, "ROLE_STAFF");
         NhanVien nhanVien = getByTenNguoiDung(tenNhanVien);
-        nhanVienRepository.delete(nhanVien);
+        Collection<Role> roles = nhanVien.getRoles();
+        roles.clear();
+        nhanVien.setRoles(roles);
+        nhanVienRepository.save(nhanVien);
+        NhanVien saved = getByTenNguoiDung(tenNhanVien);
+        nhanVienRepository.delete(saved);
+//        nguoiDungService.deleteNguoiDung(tenNhanVien);
     }
 
 }
