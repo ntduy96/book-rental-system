@@ -74,12 +74,13 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
     }).state({
         name: "employees",
         url: "/employees",
-        templateUrl : "/html/employee-management.html"
-    }).state({
-        name: "employees.all",
-        url: "/all",
-        templateUrl : "/html/employee-all.html",
+        templateUrl : "/html/employee-management.html",
         controller: "employeeCtrl"
+    }).state({
+        name: "employees.add",
+        url: "/add",
+        templateUrl : "/html/employee-add.html",
+        controller: "employeeAddCtrl"
     }).state({
         name: "employees.detail",
         url: "/:tenNhanVien",
