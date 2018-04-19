@@ -52,11 +52,6 @@ app.service("EmployeeService", function ($http) {
 
 app.controller("employeeCtrl", function ($scope, $http, $cacheFactory, EmployeeService) {
 
-    // close modal and go back to parent state
-    $scope.closeModal = function () {
-        $state.go("^.all", { inherite: true });
-    };
-
     $scope.$watch(function () {
         return EmployeeService.getNhanViens();
     }, function () {
@@ -65,6 +60,191 @@ app.controller("employeeCtrl", function ($scope, $http, $cacheFactory, EmployeeS
 
     EmployeeService.fetchNhanViens();
 
+});
+
+app.controller("employeeAddCtrl", function ($scope, $http, $state, EmployeeService) {
+    $scope.saveSuccess = false;
+    $scope.saveConflict = false;
+    $scope.fieldErrors = {
+        tenNguoiDung: [],
+        email: [],
+        hoTenNguoiDung: [],
+        chucVu: [],
+        soCmnd: [],
+        diaChiNguoiDung: [],
+        password: [],
+        confirmPassword: []
+    };
+
+    // close modal and go back to parent state
+    $scope.closeModal = function () {
+        $state.go("^", { inherite: true });
+    };
+
+
+    $scope.$watch(function () {
+        return EmployeeService.getChucVus();
+    }, function () {
+        $scope.chucVus = EmployeeService.getChucVus();
+    });
+
+    EmployeeService.fetchChucVus();
+
+    $scope.originalNhanVien = {
+        tenNguoiDung: null,
+        email: null,
+        hoTenNguoiDung: null,
+        maChucVu: null,
+        soCmnd: null,
+        diaChiNguoiDung: null,
+        password: null,
+        confirmPassword: null
+    };
+    $scope.editedNhanVien = Object.assign({}, $scope.originalNhanVien);
+
+    $scope.checkTenNguoiDung = function () {
+        var errors = [];
+        var usernameRegex = /^\w+$/g;
+        if ($scope.editedNhanVien.tenNguoiDung === undefined) {
+            errors.push('This field is required!');
+        } else {
+            if ($scope.editedNhanVien.tenNguoiDung.length < 6) {
+                errors.push('Username have to be longer than 6 characters');
+            }
+            if (!usernameRegex.test($scope.editedNhanVien.tenNguoiDung)) {
+                errors.push('Username only contains alphabet characters and numbers');
+            }
+        }
+
+        $scope.fieldErrors.tenNguoiDung = errors;
+    };
+
+    $scope.checkEmail = function () {
+        var errors = [];
+        var emailRegex = /^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$/g;
+        if ($scope.editedNhanVien.email === undefined) {
+            errors.push('This field is required!');
+        } else if (!emailRegex.test($scope.editedNhanVien.email)) {
+            errors.push("It doesn't look like a valid email");
+        }
+        $scope.fieldErrors.email = errors;
+    };
+
+    $scope.checkHoTenNguoiDung = function () {
+        var errors = [];
+        if ($scope.editedNhanVien.hoTenNguoiDung === undefined) {
+            errors.push('This field is required!');
+        }
+        $scope.fieldErrors.hoTenNguoiDung = errors;
+    };
+
+    $scope.checkChucVu = function () {
+        var errors = [];
+        if ($scope.editedNhanVien.maChucVu === null) {
+            errors.push('This field is required!');
+        }
+        $scope.fieldErrors.maChucVu = errors;
+    };
+
+    $scope.checkSoCmnd = function () {
+        var errors = [];
+        var soCmndRegex = /^\d+$/g;
+        if ($scope.editedNhanVien.soCmnd === undefined) {
+            errors.push('This field is required!');
+        } else {
+            if ($scope.editedNhanVien.soCmnd.length !== 9 && $scope.editedNhanVien.soCmnd.length !== 12) {
+                errors.push('Valid length of a CMND is 9 or 12');
+            }
+            if (!soCmndRegex.test($scope.editedNhanVien.soCmnd)) {
+                errors.push('So CMND only contains digit characters');
+            }
+        }
+        $scope.fieldErrors.soCmnd = errors;
+    };
+
+    $scope.checkDiaChiNguoiDung = function () {
+        var errors = [];
+        if ($scope.editedNhanVien.diaChiNguoiDung === undefined) {
+            errors.push('This field is required!');
+        }
+        $scope.fieldErrors.diaChiNguoiDung = errors;
+    };
+
+    $scope.checkPassword = function () {
+        var errors = [];
+        var passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=_{}()])(?=\S+$).{8,}$/g;
+        if ($scope.editedNhanVien.password) {
+            if ($scope.editedNhanVien.password === undefined) {
+                errors.push('This field is required!');
+            } else {
+                if ($scope.editedNhanVien.password.length < 8) {
+                    errors.push('Username have to be longer than 7 characters');
+                }
+                if (!passwordRegex.test($scope.editedNhanVien.password)) {
+                    errors.push('Your password seems to be unsecured!');
+                }
+            }
+        }
+        $scope.fieldErrors.password = errors;
+    };
+
+    $scope.checkConfirmPassword = function () {
+        var errors = [];
+        if ($scope.editedNhanVien.confirmPassword && $scope.editedNhanVien.password) {
+            if ($scope.editedNhanVien.confirmPassword === undefined) {
+                errors.push('This field is required!');
+            }
+            if ($scope.editedNhanVien.confirmPassword !== $scope.editedNhanVien.password) {
+                errors.push('Your passwords is not matching');
+            }
+        }
+        $scope.fieldErrors.confirmPassword = errors;
+    };
+
+    $scope.isValid = function isValid() {
+        for(let field in $scope.fieldErrors) {
+            if($scope.fieldErrors[field].length !== 0) return false;
+        }
+        return true;
+    };
+
+    $scope.create = function () {
+        if ($scope.isValid()) {
+            console.log($scope.editedNhanVien);
+            $http.post("/api/nhanvien", $scope.editedNhanVien)
+                .then(function (response) {
+                    $scope.editedNhanVien = response.data;
+                    if ($scope.editedNhanVien.anhDaiDien !== null && $scope.editedNhanVien.anhDaiDien !== $scope.originalNhanVien.anhDaiDien) {
+                        var fd = new FormData();
+                        fd.append("anhDaiDien", $scope.editedNhanVien.anhDaiDien);
+
+                        $http.post("/api/nguoidung/" + response.data.tenNguoiDung + "/anhDaiDien", fd, {
+                            headers: {'Content-Type': undefined },
+                            transformRequest: angular.identity
+                        }).then(function (response) {
+                            $scope.editedNhanVien = response.data;
+                            $scope.saveSuccess = true;
+                            $scope.saveConflict = false;
+                        });
+                    }
+                    EmployeeService.fetchNhanViens();
+                }).catch(function (reason) {
+                    $scope.saveConflict = true;
+                    $scope.saveConflict = false;
+                });
+        }
+    };
+
+    document.querySelector(".img-input-thumbnail input").onchange = function () {
+        console.log(this.files[0]);
+        var file = this.files[0];
+        var fileReader = new FileReader();
+        fileReader.onloadend = function (e) {
+            $scope.editedNhanVien.anhDaiDien = file;
+            document.querySelector(".img-input-thumbnail img").src = "data:image/jpeg;base64," + btoa(e.target.result);
+        };
+        fileReader.readAsBinaryString(file);
+    };
 });
 
 app.controller("employeeDetailCtrl", function ($scope, $http, $stateParams, $state, EmployeeService) {
@@ -84,7 +264,7 @@ app.controller("employeeDetailCtrl", function ($scope, $http, $stateParams, $sta
 
     // close modal and go back to parent state
     $scope.closeModal = function () {
-        $state.go("^.all", { inherite: true });
+        $state.go("^", { inherite: true });
     };
 
     $scope.$watch(function () {
