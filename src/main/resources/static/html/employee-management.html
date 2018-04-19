@@ -2,11 +2,6 @@
     <h1 class="h2">Nhân viên</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <form name="displayForm" id="displayForm">
-            <div class="btn-group btn-group-toggle mr-2 btn-group-sm" data-toggle="buttons">
-                <a ui-sref="employees.all"ui-sref-active="active" class="btn btn-outline-secondary">Tất cả</a>
-                <a ui-sref="employees.staff"ui-sref-active="active" class="btn btn-outline-secondary">Nhân viên</a>
-                <a ui-sref="employees.admin"ui-sref-active="active" class="btn btn-outline-secondary">Admin</a>
-            </div>
 
             <div class="btn-group btn-group-toggle mr-2" data-toggle="buttons">
                 <label class="btn btn-outline-secondary" ng-class="{'active': viewType == 'list'}">
@@ -23,7 +18,7 @@
                 </label>
             </div>
 
-            <a class="btn btn-outline-secondary mr-2" id="addBtn" ui-sref="library.add">
+            <a class="btn btn-outline-secondary mr-2" id="addBtn" ui-sref="employees.add">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="feather feather-plus">
                     <line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
@@ -39,6 +34,33 @@
 
     </div>
 
+</div>
+
+<div class="table-responsive" ng-show="viewType == 'list'">
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Mã nhân viên</th>
+            <th scope="col">Tên tài khoản</th>
+            <th scope="col">Chức vụ</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="nhanVien in nhanViens">
+            <th scope="row">{{$index + 1}}</th>
+            <td>{{nhanVien.maNguoiDung}}</td>
+            <td>{{nhanVien.tenNguoiDung}}</td>
+            <td>{{nhanVien.chucVu.tenChucVu}}</td>
+            <td>
+                <div class="btn-group">
+                    <a class="btn btn-sm btn-outline-secondary" ui-sref="employees.detail({ tenNhanVien: nhanVien.tenNguoiDung })">Xem</a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
 <ui-view></ui-view>
