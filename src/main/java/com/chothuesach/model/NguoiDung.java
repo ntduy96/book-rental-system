@@ -66,7 +66,7 @@ public class NguoiDung implements Serializable {
 	// @OneToMany(mappedBy = "tenNguoiDung", cascade = CascadeType.ALL, fetch =
 	// FetchType.EAGER)
 	@JsonView(NguoiDungView.Detailed.class)
-	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "NGUOI_DUNG_ROLE", joinColumns = {
 			@JoinColumn(name = "TEN_NGUOI_DUNG", referencedColumnName = "tenNguoiDung") }, inverseJoinColumns = {
 					@JoinColumn(name = "ROLE_ID", referencedColumnName = "roleId") })
