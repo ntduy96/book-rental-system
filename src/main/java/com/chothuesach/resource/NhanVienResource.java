@@ -40,9 +40,9 @@ public class NhanVienResource {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping
+    @PostMapping(consumes = "application/json")
     @JsonView(NhanVienView.Detailed.class)
-    public ResponseEntity registerNewNhanVien(@Valid NhanVienDto nhanVienDto, BindingResult result) {
+    public ResponseEntity registerNewNhanVien(@RequestBody @Valid NhanVienDto nhanVienDto, BindingResult result) {
         if (result.hasErrors()) {
             return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
         } else {
