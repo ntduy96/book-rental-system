@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,7 +53,8 @@ public class SachResource {
 	public Sach getOneBySlug(@PathVariable String slug) {
 		return sachService.getOneBySlug(slug);
 	}
-	
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping(consumes = "application/json")
 	@JsonView(SachView.Detailed.class)
 	public ResponseEntity addNewBook(@RequestBody @Valid SachDto sachDto, BindingResult result) {
@@ -70,7 +72,8 @@ public class SachResource {
             }
         }
 	}
-	
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PutMapping(value = "/{slug}", consumes = "application/json")
 	@JsonView(SachView.Detailed.class)
 	public ResponseEntity updateSach(@PathVariable String slug, @RequestBody @Valid SachUpdateDto sachUpdateDto, BindingResult result) {
@@ -88,7 +91,8 @@ public class SachResource {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
 	}
-	
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping("/{slug}")
 	public HashMap<String, String> deleteSach(@PathVariable String slug) {
 		sachService.deleteSachBySlug(slug);
@@ -97,6 +101,7 @@ public class SachResource {
 		return response;
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/{slug}/anhBia")
 	public void changeAnhBia(@PathVariable String slug, @RequestParam("anhBia") MultipartFile file) {
 		sachService.setAnhBia(slug, file);
@@ -120,6 +125,7 @@ public class SachResource {
 		return sachService.getLatestPrice(slug);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/{slug}/prices")
 	public ResponseEntity updatePrice(@PathVariable String slug, @RequestParam double newPrice) {
 		Sach sach = sachService.getOneBySlug(slug);

@@ -55,8 +55,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
 				.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                .antMatchers("/", "/home", "/signup", "/authority", "/user", "/resource/**", "/login**").permitAll()
-                .antMatchers("/api/nguoidung/check").permitAll()
+                .antMatchers("/", "/home", "/signup", "/authority", "/user", "/resource/**", "/login**", "/html/**").permitAll()
+                .antMatchers("/api/sach/**").permitAll()
 				.antMatchers("/manage").hasAuthority("ROLE_ADMIN")
 				.anyRequest().authenticated()
                 .and()
