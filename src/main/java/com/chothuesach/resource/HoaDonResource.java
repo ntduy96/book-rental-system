@@ -7,6 +7,8 @@ import com.chothuesach.service.HoaDonService;
 import com.chothuesach.service.NguoiDungService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -29,8 +31,8 @@ public class HoaDonResource {
 
     @GetMapping
     @JsonView(HoaDonView.Overview.class)
-    public Iterable<HoaDon> getAllHoaDon() {
-        return hoaDonService.getAllHoaDon();
+    public Iterable<HoaDon> getAllHoaDon(@SortDefault(sort = {"ngayLapHoaDon"}, direction = Sort.Direction.DESC) Sort sort) {
+        return hoaDonService.getAllHoaDon(sort);
     }
 
     @GetMapping("/cuatoi")

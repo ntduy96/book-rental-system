@@ -7,6 +7,7 @@ import com.chothuesach.model.*;
 import com.chothuesach.repository.ChiTietHoaDonRepository;
 import com.chothuesach.repository.HoaDonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -31,8 +32,8 @@ public class HoaDonService {
     @Autowired
     private ChiTietHoaDonRepository chiTietHoaDonRepository;
 
-    public Iterable<HoaDon> getAllHoaDon() {
-        return hoaDonRepository.findAll();
+    public List<HoaDon> getAllHoaDon(Sort sort) {
+        return hoaDonRepository.findAll(sort);
     }
 
     public HoaDon getHoaDonByMaHoaDon(String maHoaDon) {
