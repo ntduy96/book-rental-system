@@ -1,7 +1,11 @@
 package com.chothuesach.resource;
 
+import com.chothuesach.jsonview.NguoiDungView;
+import com.chothuesach.model.NguoiDung;
 import com.chothuesach.service.NguoiDungService;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,6 +18,13 @@ public class NguoiDungResource {
 
 	@Autowired
 	private NguoiDungService nguoiDungService;
+
+	@GetMapping("/me")
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@JsonView(NguoiDungView.Detailed.class)
+	public NguoiDung getMyProfile(Principal principal) {
+		return nguoiDungService.getOneByUsername(principal.getName());
+	}
 
 	@GetMapping("/check")
 	public HashMap<String, Boolean> existenceCheck(
