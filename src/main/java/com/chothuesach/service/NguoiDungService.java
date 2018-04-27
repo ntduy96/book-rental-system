@@ -75,11 +75,11 @@ public class NguoiDungService {
 	}
 	
 	public boolean tenNguoiDungExist(String tenNguoiDung) {
-		return nguoiDungRepository.findOneByTenNguoiDung(tenNguoiDung) != null;
+		return nguoiDungRepository.findOneByTenNguoiDung(tenNguoiDung).isPresent();
 	}
 	
 	public boolean soCmndExist(String soCmnd) {
-		return nguoiDungRepository.findOneBySoCmnd(soCmnd) != null;
+		return nguoiDungRepository.findOneBySoCmnd(soCmnd).isPresent();
 	}
 
 	public void setAnhDaiDien(String tenNguoiDung, MultipartFile file) {
