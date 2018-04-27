@@ -1,0 +1,24 @@
+<div class="bg-white border border-bottom-0 cart-box d-flex flex-column rounded-top">
+    <p class="mx-3 my-2 text-center">Giỏ hàng
+        <span class="badge badge-primary ml-2">{{items.length}}</span>
+    </p>
+    <div class="cart-body px-2">
+        <ul class="list-group mb-3">
+            <li ng-repeat="item in items" class="d-flex justify-content-between lh-condensed list-group-item">
+                <div>
+                    <h6 class="my-0">{{item.tenSach}}</h6>
+                </div>
+                <span class="text-muted">{{item.donGiaBan}}</span>
+            </li>
+
+            <li class="list-group-item d-flex justify-content-between">
+                <span>Tổng cộng</span>
+                <strong>{{getTotal()}}</strong>
+            </li>
+        </ul>
+    </div>
+    <div class="alert alert-success" role="alert" ng-show="success">Đã đặt hàng thành công</div>
+    <div class="cart-footer">
+        <button class="btn btn-lg btn-block btn-primary rounded-0" ng-click="sendCart()">Đặt hàng</button>
+    </div>
+</div>
