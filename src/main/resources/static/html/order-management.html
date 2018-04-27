@@ -1,1 +1,68 @@
-<h1>Orders</h1>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h2">Hóa đơn</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <form name="displayForm" id="displayForm">
+
+            <div class="btn-group btn-group-toggle mr-2" data-toggle="buttons">
+                <label class="btn btn-outline-secondary" ng-class="{'active': viewType == 'list'}">
+                    <input type="radio" name="viewType" id="option1" autocomplete="off" checked value="list" ng-model="viewType" ng-init="viewType = 'list'">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="feather feather-list">
+                        <line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line>
+                    </svg>
+                </label>
+                <label class="btn btn-outline-secondary" ng-class="{'active': viewType == 'grid'}">
+                    <input type="radio" name="viewType" id="option2" autocomplete="off" value="grid" ng-model="viewType">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="feather feather-grid">
+                        <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                </label>
+            </div>
+
+            <a class="btn btn-outline-secondary mr-2" id="addBtn" ui-sref="hoaDon.add">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="feather feather-plus">
+                    <line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+            </a>
+
+            <button class="btn btn-outline-secondary mr-2" id="refreshBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="feather feather-rotate-ccw">
+                    <polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                </svg>
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div class="table-responsive" ng-show="viewType == 'list'">
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Mã hóa đơn</th>
+            <th scope="col">Họ tên khách hàng</th>
+            <th scope="col">Giá trị</th>
+            <th scope="col">Ngày lập</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="hoaDon in hoaDons">
+            <th scope="row">{{$index + 1}}</th>
+            <td>{{hoaDon.maHoaDon}}</td>
+            <td>{{hoaDon.hoTenKhachHang}}</td>
+            <td>{{hoaDon.giaTri | currency : 'đ' : 0}}</td>
+            <td>{{hoaDon.ngayLapHoaDon | date: 'dd/MM/yyyy HH:mm'}}</td>
+            <td>
+                <div class="btn-group">
+                    <a class="btn btn-sm btn-outline-secondary" ui-sref="order.detail({ maHoaDon: hoaDon.maHoaDon })">Xem</a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<ui-view></ui-view>
