@@ -73,7 +73,7 @@ public class HoaDonService {
             chiTietHoaDon.setHoaDon(savedHoaDon);
             chiTietHoaDon.setSach(sach);
             chiTietHoaDon.setTenSach(sach.getTenSach());
-            chiTietHoaDon.setDonGiaBan(sachService.getLatestPrice(sach.getSlug()).donGia);
+            chiTietHoaDon.setDonGiaBan(sachService.getLatestPrice(sach.getSlug()).getDonGia());
             chiTietHoaDon.setSoLuongBan(chiTietHoaDonDto.getSoLuongBan());
             ChiTietHoaDon saved = chiTietHoaDonRepository.save(chiTietHoaDon);
             sachService.changeSoLuongSach(sach.getSlug(), sach.getSoLuong() - chiTietHoaDonDto.getSoLuongBan());

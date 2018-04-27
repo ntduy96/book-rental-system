@@ -59,10 +59,9 @@ public class Sach implements Serializable {
 	private Date ngayTao;
 
 	@OneToMany(mappedBy="sach")
-	@OrderBy("THOI_GIAN DESC")
+	@OrderBy("NGAY_TAO DESC")
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@JsonView(SachView.CurrentPrice.class)
-	@Immutable
 	private Collection<DonGiaBan> donGiaBan;
 	
 	@OneToMany(mappedBy="sach")

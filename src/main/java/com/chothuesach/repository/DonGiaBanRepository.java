@@ -1,14 +1,12 @@
 package com.chothuesach.repository;
 
+import com.chothuesach.model.DonGiaBan;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import com.chothuesach.model.DonGiaBan;
-import com.chothuesach.model.DonGiaBanId;
+public interface DonGiaBanRepository extends CrudRepository<DonGiaBan, Long> {
 
-public interface DonGiaBanRepository extends CrudRepository<DonGiaBan, DonGiaBanId> {
-
-	@Query(value = "SELECT * FROM DON_GIA_BAN WHERE MA_SACH = ?1 ORDER BY THOI_GIAN DESC LIMIT 1", nativeQuery = true)
+	@Query(value = "SELECT * FROM DON_GIA_BAN WHERE MA_SACH = ?1 ORDER BY NGAY_TAO DESC LIMIT 1", nativeQuery = true)
 	public DonGiaBan getLatestDonGiaBanOfSach(String sachId);
 
 }
