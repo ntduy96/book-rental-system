@@ -49,12 +49,10 @@ app.service("BookService", function ($http) {
     };
 
     this.fetchBookDetail = function (slug) {
-        let bookDetails = $http.get("/api/sach/" + slug);
-        let bookPrice = $http.get("/api/sach/" + slug + "/prices/latest");
-        return Promise.all([bookDetails, bookPrice])
+        return $http.get("/api/sach/" + slug)
             .then(function (response) {
-                bookDetail[slug] = response[0].data;
-                bookDetail[slug].donGiaBan = response[1].data.donGia;
+                bookDetail[slug] = response.data;
+                bookDetail[slug].donGiaBan = response.data.donGiaBan[0].donGia;
                 return new Promise(function (resolve) {
                     resolve(bookDetail[slug]);
                 });
