@@ -61,7 +61,7 @@ public class Sach implements Serializable {
 	@OneToMany(mappedBy="sach")
 	@OrderBy("NGAY_TAO DESC")
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@JsonView(SachView.CurrentPrice.class)
+	@JsonView({SachView.Overview.class, SachView.CurrentPrice.class})
 	private Collection<DonGiaBan> donGiaBan;
 	
 	@OneToMany(mappedBy="sach")

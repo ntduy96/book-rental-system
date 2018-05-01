@@ -17,7 +17,7 @@ public class DonGiaBan implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long maDonGiaBan;
 
-	@JsonView(SachView.CurrentPrice.class)
+	@JsonView({SachView.Overview.class, SachView.CurrentPrice.class})
 	private double donGia = 0;
 
 	@ManyToOne
