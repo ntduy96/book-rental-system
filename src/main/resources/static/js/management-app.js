@@ -11,7 +11,13 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
     }).state({
         name: "orders",
         url: "/orders",
-        templateUrl : "/html/order-management.html"
+        templateUrl : "/html/order-management.html",
+        controller: "orderCtrl"
+    }).state({
+        name: "orders.detail",
+        url: "/:maHoaDon",
+        templateUrl : "/html/order-details.html",
+        controller: "orderDetailCtrl"
     }).state({
         name: "library",
         url: "/library",
