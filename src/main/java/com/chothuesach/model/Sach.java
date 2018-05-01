@@ -80,10 +80,8 @@ public class Sach implements Serializable {
 		joinColumns={@JoinColumn(name="MA_SACH")},
 		inverseJoinColumns={@JoinColumn(name="MA_THE_LOAI")}
 	)
-//	@JsonIgnore
 	@JsonView(SachView.Detailed.class)
 	@JsonManagedReference
-	@Immutable
 	private Collection<TheLoai> sachThuocTheLoai;
 	
 	@ManyToMany(fetch=FetchType.LAZY)
@@ -92,9 +90,7 @@ public class Sach implements Serializable {
 		joinColumns={@JoinColumn(name="MA_SACH")},
 		inverseJoinColumns={@JoinColumn(name="MA_TAC_GIA")}
 	)
-//	@JsonIgnore
 	@JsonView(SachView.Detailed.class)
-	@Immutable
 	private Collection<TacGia> sachCuaTacGia;
 	
 	@PrePersist
