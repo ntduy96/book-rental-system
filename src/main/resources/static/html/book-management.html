@@ -31,7 +31,10 @@
                     <img ng-src="{{sach.anhBia != null ? sach.anhBia : 'http://via.placeholder.com/240x320'}}" alt="thumbnail" width="100%">
                     <div class="card-body text-center">
                         <p class="card-text text-center badge">{{sach.maSach}}</p>
-                        <p class="card-text text-center">{{sach.tenSach}}</p>
+                        <div class="card-text text-center">
+                            {{sach.tenSach}}
+                            <p class="text-secondary">{{sach.donGiaBan[0].donGia | currency : 'đ' : 0}}</p>
+                        </div>
                         <div class="align-items-center d-flex justify-content-center">
                             <div class="btn-group">
                                 <a class="btn btn-sm btn-outline-secondary" ui-sref="library.book.detail({ slug: sach.slug })">Xem</a>
