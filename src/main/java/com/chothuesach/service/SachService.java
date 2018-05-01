@@ -12,7 +12,6 @@ import com.chothuesach.model.TheLoai;
 import com.chothuesach.repository.DonGiaBanRepository;
 import com.chothuesach.repository.SachRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,9 +35,22 @@ public class SachService {
 
 	@Autowired
     private DonGiaBanRepository donGiaBanRepository;
+
+	private List<Sach> filterDonGiaBan(List<Sach> sachs) {
+		for (Sach sach : sachs) {
+			List<DonGiaBan> donGiaBans = new ArrayList<>(sach.getDonGiaBan());
+			if (donGiaBans.size() > 0) {
+				List<DonGiaBan> displayDonGiaBans = new ArrayList<>();
+				displayDonGiaBans.add(donGiaBans.get(0));
+				sach.setDonGiaBan(displayDonGiaBans);
+			}
+		}
+		return sachs;
+	}
 	
-	public Page<Sach> getAllSach(Pageable pageable) {
-		return sachRepository.findAll(pageable);
+	public List<Sach> getAllSach(Pageable pageable) {
+		List<Sach> sachs = sachRepository.findAll(pageable).getContent();
+		return filterDonGiaBan(sachs);
 	}
 
 	public List<Sach> getSachByTheLoai(String theLoaiSlug) {
@@ -47,7 +59,8 @@ public class SachService {
 	}
 	
 	public List<Sach> searchByTenSach(String tenSach, Pageable pageable) {
-		return sachRepository.findByTenSachContains(tenSach, pageable);
+		List<Sach> sachs = sachRepository.findByTenSachContains(tenSach, pageable);
+		return filterDonGiaBan(sachs);
 	}
 
 	public Sach getOneByMaSach(String maSach) {
