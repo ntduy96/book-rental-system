@@ -25,11 +25,11 @@ public class HoaDon implements Serializable {
 	private String maHoaDon;
 
 	@NotNull
-	@JsonView(HoaDonView.Detailed.class)
+	@JsonView(HoaDonView.Overview.class)
 	private double giaTri;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@JsonView(HoaDonView.Detailed.class)
+	@JsonView(HoaDonView.Overview.class)
 	private Date ngayLapHoaDon;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -52,7 +52,7 @@ public class HoaDon implements Serializable {
 	private NguoiDung khachHang;
 
 	@NotNull
-	@JsonView(HoaDonView.Detailed.class)
+	@JsonView(HoaDonView.Overview.class)
 	private String hoTenKhachHang;
 
 	@NotNull
