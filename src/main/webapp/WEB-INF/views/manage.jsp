@@ -11,6 +11,7 @@
     <script src="https://unpkg.com/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
     <script src="/js/management-app.js"></script>
     <script src="/js/employee-management.js"></script>
+    <script src="/js/order-management.js"></script>
 </head>
 <body ng-app="managementApp">
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
