@@ -55,7 +55,7 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
         } else if (isStaff) {
             return "manage";
         } else if (isUser) {
-            return "home";
+            return "home#!/book";
         } else {
             throw new IllegalStateException();
         }
