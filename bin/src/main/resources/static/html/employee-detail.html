@@ -1,0 +1,103 @@
+<div class="modal fade show" id="employeeDetailModal" tabindex="-1" role="dialog" aria-labelledby="employeeDetailModal">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">{{editedNhanVien.maTacGia}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col">
+                            <div class="alert alert-success" role="alert" ng-show="saveSuccess">
+                                Đã cập nhật thông tin thành công
+                            </div>
+                            <div class="alert alert-warning" role="alert" ng-hide="deleteSuccess">
+                                Không thể xóa nhân viên này
+                            </div>
+                            <div class="mb-3">
+                                <div class="bg-light img-input-thumbnail avatar rounded-circle">
+                                    <img class="img-thumbnail input-figure rounded-circle" ng-src="{{editedNhanVien.anhDaiDien != null ? editedNhanVien.anhDaiDien : ''}}">
+                                    <input type="file" class="form-control" name="anhDaiDien" id="anhDaiDien" ng-model="editedNhanVien.anhDaiDien">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" name="email" id="email" ng-model="editedNhanVien.email" ng-class="fieldErrors.email.length == 0 ? 'is-valid' : 'is-invalid'" ng-keyup="checkEmail()">
+                                <div class="invalid-feedback">
+                                    {{fieldErrors.email.join(", ")}}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="tenNguoiDung">Tên người dùng</label>
+                                <input disabled type="text" class="form-control" name="password" id="tenNguoiDung" ng-model="editedNhanVien.tenNguoiDung" ng-class="fieldErrors.tenNguoiDung.length == 0 ? 'is-valid' : 'is-invalid'" ng-keyup="checkTenNguoiDung()">
+                                <div class="invalid-feedback">
+                                    {{fieldErrors.tenNguoiDung.join(", ")}}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="hoTenNguoiDung">Họ tên người dùng</label>
+                                <input type="text" class="form-control" name="hoTenNguoiDung" id="hoTenNguoiDung" ng-model="editedNhanVien.hoTenNguoiDung" ng-class="fieldErrors.hoTenNguoiDung.length == 0 ? 'is-valid' : 'is-invalid'" ng-keyup="checkHoTenNguoiDung()">
+                                <div class="invalid-feedback">
+                                    {{fieldErrors.hoTenNguoiDung.join(", ")}}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="chucVu">Chức vụ</label>
+                                <select class="form-control" name="chucVu" id="chucVu" ng-model="editedNhanVien.chucVu.maChucVu" ng-class="fieldErrors.chucVu.length == 0 ? 'is-valid' : 'is-invalid'" ng-change="checkChucVu()">
+                                    <option ng-repeat="chucVu in chucVus" id="{{chucVu.maChucVu}}" value="{{chucVu.maChucVu}}" ng-selected="editedNhanVien.chucVu.maChucVu == chucVu.maChucVu">{{chucVu.tenChucVu}}</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    {{fieldErrors.chucVu.join(", ")}}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="diaChiNguoiDung">Địa chỉ</label>
+                                <input type="text" class="form-control" name="diaChiNguoiDung" id="diaChiNguoiDung" ng-model="editedNhanVien.diaChiNguoiDung" ng-class="fieldErrors.diaChiNguoiDung.length == 0 ? 'is-valid' : 'is-invalid'" ng-keyup="checkDiaChiNguoiDung()">
+                                <div class="invalid-feedback">
+                                    {{fieldErrors.diaChiNguoiDung.join(", ")}}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="soCmnd">Số CMND</label>
+                                <input type="text" class="form-control" name="soCmnd" id="soCmnd" ng-model="editedNhanVien.soCmnd" ng-class="fieldErrors.soCmnd.length == 0 ? 'is-valid' : 'is-invalid'" ng-keyup="checkSoCmnd()">
+                                <div class="invalid-feedback">
+                                    {{fieldErrors.soCmnd.join(", ")}}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password">Mật khẩu</label>
+                                <input type="password" class="form-control" name="password" id="password" ng-model="editedNhanVien.password" ng-class="fieldErrors.password.length == 0 ? 'is-valid' : 'is-invalid'" ng-keyup="checkPassword()" placeholder="••••••••••">
+                                <div class="invalid-feedback">
+                                    {{fieldErrors.password.join(", ")}}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirmPassword">Xác nhận lại mật khẩu</label>
+                                <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" ng-model="editedNhanVien.confirmPassword" ng-class="fieldErrors.confirmPassword.length == 0 ? 'is-valid' : 'is-invalid'" ng-keyup="checkConfirmPassword()" placeholder="••••••••••">
+                                <div class="invalid-feedback">
+                                    {{fieldErrors.confirmPassword.join(", ")}}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="closeModal()">Đóng</button>
+                <button type="button" class="btn btn-danger" ng-click="deleteEmployee()">Xóa</button>
+                <button type="button" class="btn btn-primary" ng-click="saveChanges()">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+</div>

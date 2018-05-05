@@ -1,0 +1,65 @@
+<div class="modal fade show" id="orderDetailModal" tabindex="-1" role="dialog" aria-labelledby="orderDetailModal">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">{{editedTacGia.maTacGia}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="maHoaDon">Mã hóa đơn</label>
+                                <input type="text" class="form-control" name="maHoaDon" id="maHoaDon" ng-model="editedHoaDon.maHoaDon" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="maKhachHang">Mã khách hàng</label>
+                                <input type="text" class="form-control" name="maKhachHang" id="maKhachHang" ng-model="editedHoaDon.khachHang.maNguoiDung">
+                            </div>
+                            <div class="mb-3">
+                                <label for="hoTenKhachHang">Họ tên khách hàng</label>
+                                <input type="text" class="form-control" name="hoTenKhachHang" id="hoTenKhachHang" ng-model="editedHoaDon.hoTenKhachHang">
+                            </div>
+                            <div class="mb-3">
+                                <label for="soCmndKhachHang">Số CMND khách hàng</label>
+                                <input type="text" class="form-control" name="soCmndKhachHang" id="soCmndKhachHang" ng-model="editedHoaDon.soCmndKhachHang">
+                            </div>
+                            <div class="mb-3">
+                                <label for="diaChiKhachHang">Địa chỉ khách hàng</label>
+                                <input type="text" class="form-control" name="diaChiKhachHang" id="diaChiKhachHang" ng-model="editedHoaDon.diaChiKhachHang">
+                            </div>
+                            <div class="mb-3">
+                                <label>Chi tiết hóa đơn</label>
+                                <ul class="list-group">
+                                    <li ng-repeat="item in editedHoaDon.chiTietHoaDon" class="d-flex justify-content-between lh-condensed list-group-item">
+                                        <div>
+                                            <h6 class="my-0">{{item.tenSach}}</h6>
+                                        </div>
+                                        <span class="text-muted">{{item.donGiaBan}}</span>
+                                    </li>
+
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <span>Tổng cộng</span>
+                                        <strong>{{editedHoaDon.giaTri}}</strong>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="mb-3">
+                                <label for="giaTri">Giá trị</label>
+                                <input type="text" class="form-control" name="giaTri" id="giaTri" ng-model="editedHoaDon.giaTri" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="closeModal()">Đóng</button>
+                <button type="button" class="btn btn-danger" ng-click="deleteHoaDon()">Xóa</button>
+                <button type="button" class="btn btn-primary" ng-click="saveChanges()">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+</div>

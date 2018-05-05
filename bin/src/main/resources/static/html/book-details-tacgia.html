@@ -1,0 +1,37 @@
+<div class="modal fade show" id="bookDetailTacGiaModal" tabindex="-1" role="dialog" aria-labelledby="bookDetailTacGiaModal">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Tác giả</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Tên tác giả" aria-label="Recipient's username" ng-model="search">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="search-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="feather feather-search">
+                                        <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3" ng-repeat="tacGia in tacGias | filter: {tenTacGia: search}">
+                            <input type="checkbox" class="form-check-input" name="sachCuaTacGia" id="{{tacGia.maTacGia}}" value="{{tacGia.tenTacGia}}" ng-checked="$parent.editedSach.sachCuaTacGia.includes(tacGia.tenTacGia)">
+                            <label for="{{tacGia.maTacGia}}">{{tacGia.tenTacGia}}</label>
+                        </div>
+                        <button type="button" class="btn btn-block" ng-show="noMatchingTacGia()" ng-click="createNewTacGia()">Thêm tác giả</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="closeModal()">Đóng</button>
+                <button type="button" class="btn btn-primary" ng-click="completeAction()">Xong</button>
+            </div>
+        </div>
+    </div>
+</div>

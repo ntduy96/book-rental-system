@@ -1,0 +1,26 @@
+<div class="table-responsive" ng-show="$parent.viewType == 'list'">
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Mã nhân viên</th>
+            <th scope="col">Tên tài khoản</th>
+            <th scope="col">Chức vụ</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="nhanVien in nhanViens">
+            <th scope="row">{{$index + 1}}</th>
+            <td>{{nhanVien.maNguoiDung}}</td>
+            <td>{{nhanVien.tenNguoiDung}}</td>
+            <td>{{nhanVien.chucVu.tenChucVu}}</td>
+            <td>
+                <div class="btn-group">
+                    <a class="btn btn-sm btn-outline-secondary" ui-sref="employees.detail({ tenNhanVien: nhanVien.tenNguoiDung })">Xem</a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

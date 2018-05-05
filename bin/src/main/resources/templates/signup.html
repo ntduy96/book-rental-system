@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<body>
+<h1>registration form</h1>
+<form action="/signup" th:object="${user}" method="POST" enctype="utf8">
+    <div>
+        <label>Tên người dùng</label>
+        <input th:field="*{tenNguoiDung}"/>
+        <p th:each="error: ${#fields.errors('tenNguoiDung')}"
+          th:text="${error}">Validation error</p>
+    </div>
+    <div>
+        <label>Họ và tên</label>
+        <input th:field="*{hoTenNguoiDung}"/>
+        <p th:each="error : ${#fields.errors('hoTenNguoiDung')}"
+          th:text="${error}">Validation error</p>
+    </div>
+    <div>
+        <label>Số CMND</label>
+        <input th:field="*{soCmnd}"/>
+        <p th:each="error : ${#fields.errors('soCmnd')}"
+          th:text="${error}">Validation error</p>
+    </div>
+    <div>
+        <label>Địa chỉ</label>
+        <input th:field="*{diaChiNguoiDung}"/>
+        <p th:each="error : ${#fields.errors('diaChiNguoiDung')}"
+          th:text="${error}">Validation error</p>
+    </div>
+    <div>
+        <label>email</label>
+        <input type="email" th:field="*{email}"/>
+        <p th:each="error : ${#fields.errors('email')}"
+          th:text="${error}">Validation error</p>
+    </div>
+    <div>
+        <label>password</label>
+        <input type="password" th:field="*{password}"/>
+        <p th:each="error : ${#fields.errors('password')}"
+          th:text="${error}">Validation error</p>
+    </div>
+    <div>
+        <label>Xác nhận mật khẩu</label>
+        <input type="password" th:field="*{confirmPassword}"/>
+        <p th:each="error : ${#fields.errors('confirmPassword')}"
+          th:utext="${error}">Validation error</p>
+    </div>
+	<div th:if="${#fields.hasGlobalErrors()}">
+		<p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
+	</div>
+	<button type="submit">Đăng ký</button>
+</form>
+
+<div>
+	Bạn đã có tài khoản rồi hãy <a th:href="@{/login}">Đăng nhập</a>
+</div>
+
+</body>
+</html>
