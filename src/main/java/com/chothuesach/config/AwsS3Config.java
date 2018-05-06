@@ -1,39 +1,44 @@
 package com.chothuesach.config;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.*;
-
-import java.io.InputStream;
-import java.net.URI;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 /**
  * Configuration for AWS S3
  */
+@Configuration
 public class AwsS3Config {
 
-    private static final String bucketName = "book-rental-system-files";
+    @Value("${jsa.s3.bucket}")
+    private String bucketName;
 
-    private static final AWSCredentials credentials = new ProfileCredentialsProvider().getCredentials();
+    @Value("${jsa.aws.access_key_id}")
+    private String awsId;
 
-    private static final AmazonS3 s3client = new AmazonS3Client(credentials);
+    @Value("${jsa.aws.secret_access_key}")
+    private String awsKey;
+
+    @Value("${jsa.s3.region}")
+    private String region;
 
     private static final String SUFFIX = "/";
 
-    public AmazonS3 getS3client() {
-        return s3client;
+    @Bean
+    public AmazonS3 getS3Client() {
+        BasicAWSCredentials awsCreds = new BasicAWSCredentials(awsId, awsKey);
+        AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+				.withRegion(Regions.fromName(region))
+                  .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
+                  .build();
+        return s3Client;
     }
 
-    public static String uploadFile(String folderName, String file, InputStream inputStream) {
-        String fileName = folderName + SUFFIX + file;
-        s3client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, new ObjectMetadata()).withCannedAcl(CannedAccessControlList.PublicRead));
-        S3Object s3Object = s3client.getObject(new GetObjectRequest(bucketName, fileName));
-        return s3Object.getObjectContent().getHttpRequest().getURI().toString();
-    }
-
-    public static void deleteFile(URI uri) {
-        s3client.deleteObject(bucketName, uri.getPath().replaceFirst("/", ""));
-    }
 }
