@@ -57,15 +57,6 @@
         <a class="border-0 btn btn-outline-secondary nav-link" href="/signup">Đăng ký</a>
         <a class="border-0 btn btn-outline-primary nav-link" href="/login">Đăng nhập</a>
     </sec:authorize>
-    <%--<div class="d-inline-flex" ng-hide="user == {}">--%>
-        <%--<a class="border-0 btn btn-outline-secondary nav-link" href="/signup">Đăng ký</a>--%>
-        <%--<a class="border-0 btn btn-outline-primary nav-link" href="/login">Đăng nhập</a>--%>
-    <%--</div>--%>
-
-    <%--<div class="d-inline-flex" ng-show="user != {}">--%>
-        <%--<img ng-src="{{user.anhDaiDien != null ? user.anhDaiDien : ''}}" ng-alt="{{user.anhDaiDien}}">--%>
-        <%--<a class="border-0 btn btn-outline-primary nav-link" href="#" ng-model="user.tenNguoiDung">{{user.tenNguoiDung}}</a>--%>
-    <%--</div>--%>
 </nav>
 <div class="nav-placeholder"></div>
 <div ui-view></div>
