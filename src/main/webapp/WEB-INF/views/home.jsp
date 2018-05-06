@@ -50,6 +50,7 @@
                 </form>
             </div>
         </div>
+        <div ui-view="cart"></div>
     </sec:authorize>
     <sec:authorize access="hasRole('ROLE_ANONYMOUS')">
         <sec:authentication var="user" property="principal"></sec:authentication>
@@ -68,6 +69,5 @@
 </nav>
 <div class="nav-placeholder"></div>
 <div ui-view></div>
-<div ui-view="cart"></div>
 </body>
 </html>
