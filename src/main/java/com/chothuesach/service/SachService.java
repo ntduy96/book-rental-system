@@ -1,6 +1,5 @@
 package com.chothuesach.service;
 
-import com.chothuesach.config.AwsS3Config;
 import com.chothuesach.dto.SachDto;
 import com.chothuesach.dto.SachUpdateDto;
 import com.chothuesach.exception.BookTitleExistsException;
@@ -29,12 +28,15 @@ public class SachService {
 
 	@Autowired
 	private TheLoaiService theLoaiService;
-	
+
 	@Autowired
 	private TacGiaService tacGiaService;
 
 	@Autowired
     private DonGiaBanRepository donGiaBanRepository;
+
+    @Autowired
+	private S3Service s3Service;
 
 	private List<Sach> filterDonGiaBan(List<Sach> sachs) {
 		for (Sach sach : sachs) {
@@ -47,7 +49,7 @@ public class SachService {
 		}
 		return sachs;
 	}
-	
+
 	public List<Sach> getAllSach(Pageable pageable) {
 		List<Sach> sachs = sachRepository.findAll(pageable).getContent();
 		return filterDonGiaBan(sachs);
@@ -57,7 +59,7 @@ public class SachService {
 		TheLoai theLoai = theLoaiService.getTheLoaiBySlug(theLoaiSlug);
 		return sachRepository.findBySachThuocTheLoai(theLoai);
 	}
-	
+
 	public List<Sach> searchByTenSach(String tenSach, Pageable pageable) {
 		List<Sach> sachs = sachRepository.findByTenSachContains(tenSach, pageable);
 		return filterDonGiaBan(sachs);
@@ -78,7 +80,7 @@ public class SachService {
 	public boolean tenSachExist(String tenSach) {
 		return sachRepository.findOneByTenSach(tenSach) != null ? true : false;
 	}
-	
+
 	public Sach createNewSach(SachDto sachDto) {
 		if (tenSachExist(sachDto.getTenSach())) {
 			throw new ResourceConflictException(sachDto.getTenSach());
@@ -144,10 +146,10 @@ public class SachService {
 			// check if file type is image or not
 			if (file.getContentType().contains("image/")) {
 				if (sach.getAnhBia() != null) {
-					AwsS3Config.deleteFile(new URI(sach.getAnhBia()));
+					s3Service.deleteFile(new URI(sach.getAnhBia()));
 				}
 				// upload image to book-cover folder in s3 file bucket
-				String anhBiaUrl = AwsS3Config.uploadFile("book-cover", file.getOriginalFilename(), file.getInputStream());
+				String anhBiaUrl = s3Service.uploadFile("book-cover", file.getOriginalFilename(), file.getInputStream());
 				sach.setAnhBia(anhBiaUrl);
 				sachRepository.save(sach);
 			}
@@ -157,7 +159,7 @@ public class SachService {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void changeSoLuongSach(String slug, long newSoLuong) {
 		sachRepository.updateSoLuongSachByMaSach(newSoLuong, slug);
 	}
@@ -165,15 +167,15 @@ public class SachService {
 	public DonGiaBan getLatestPrice(String slug) {
 	    return donGiaBanRepository.getLatestDonGiaBanOfSach(sachRepository.findOneBySlug(slug).getMaSach());
     }
-	
+
 	public void deleteSachByMaSach(String maSach) {
 		sachRepository.deleteByMaSach(maSach);
 	}
-	
+
 	public void deleteSachBySlug(String slug) {
 		sachRepository.deleteBySlug(slug);
 	}
-	
+
 	private Collection<TheLoai> mapTheLoai(Collection<TheLoai> theLoais, Set<String> tenTheLoais) {
 		theLoais.removeAll(theLoais);
         for (String theLoai : tenTheLoais) {
@@ -181,7 +183,7 @@ public class SachService {
         }
 		return theLoais;
 	}
-	
+
 	private Collection<TacGia> mapTacGia(Collection<TacGia> tacGias, Set<String> tenTacGias) {
 	    tacGias.removeAll(tacGias);
         for (String tacGia : tenTacGias) {
@@ -189,7 +191,7 @@ public class SachService {
         }
 		return tacGias;
 	}
-	
+
 	private void mapDonGiaBan(Sach sach, Double donGiaBan) {
 		DonGiaBan newDonGiaBan = new DonGiaBan();
 		newDonGiaBan.setDonGia(donGiaBan);

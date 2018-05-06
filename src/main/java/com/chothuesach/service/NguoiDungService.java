@@ -1,6 +1,5 @@
 package com.chothuesach.service;
 
-import com.chothuesach.config.AwsS3Config;
 import com.chothuesach.dto.NguoiDungDto;
 import com.chothuesach.exception.ResourceConflictException;
 import com.chothuesach.exception.ResourceNotFoundException;
@@ -27,10 +26,13 @@ public class NguoiDungService {
 
 	@Autowired
 	private NguoiDungRepository nguoiDungRepository;
-	
+
 	@Autowired
 	private RoleRepository roleRepository;
-	
+
+	@Autowired
+	private S3Service s3Service;
+
 	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
 
 	public NguoiDung getOneByUsername(String username) {
@@ -42,7 +44,7 @@ public class NguoiDungService {
 	}
 
 	public NguoiDung registerNewNguoiDung(NguoiDungDto nguoiDungDto) {
-		
+
 		if (emailExist(nguoiDungDto.getEmail())) {
 			throw new ResourceConflictException("email " + nguoiDungDto.getEmail() + " đã tồn tại");
 		}
@@ -73,11 +75,11 @@ public class NguoiDungService {
 	public boolean emailExist(String email) {
 		return nguoiDungRepository.findOneByEmail(email).isPresent();
 	}
-	
+
 	public boolean tenNguoiDungExist(String tenNguoiDung) {
 		return nguoiDungRepository.findOneByTenNguoiDung(tenNguoiDung).isPresent();
 	}
-	
+
 	public boolean soCmndExist(String soCmnd) {
 		return nguoiDungRepository.findOneBySoCmnd(soCmnd).isPresent();
 	}
@@ -88,9 +90,9 @@ public class NguoiDungService {
 		    // check if file type is image or not
 			if (file.getContentType().contains("image/")) {
 				if (nguoiDung.getAnhDaiDien() != null) {
-					AwsS3Config.deleteFile(new URI(nguoiDung.getAnhDaiDien()));
+					s3Service.deleteFile(new URI(nguoiDung.getAnhDaiDien()));
 				}
-				String avatarUrl = AwsS3Config.uploadFile("user-cover", file.getOriginalFilename(), file.getInputStream());
+				String avatarUrl = s3Service.uploadFile("user-cover", file.getOriginalFilename(), file.getInputStream());
 				nguoiDung.setAnhDaiDien(avatarUrl);
 				nguoiDungRepository.save(nguoiDung);
 			} else {
