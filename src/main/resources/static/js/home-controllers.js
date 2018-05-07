@@ -17,7 +17,7 @@ app.controller("homeCtrl", function ($scope, UserService) {
 
 });
 
-app.controller("bookCtrl", function ($scope, UserService, BookService, CartService) {
+app.controller("bookCtrl", function ($scope, $state, UserService, BookService, CartService) {
 
     $scope.sachs = [];
     $scope.searchResults = [];
@@ -47,6 +47,34 @@ app.controller("bookCtrl", function ($scope, UserService, BookService, CartServi
             $scope.sachs = BookService.getBooks();
         }
     }
+
+});
+
+app.controller("bookDetailCtrl", function ($scope, $stateParams, $state, BookService, CartService) {
+    
+    $scope.sach = {};
+
+    $scope.$watch(function () {
+        return BookService.getBookDetail($stateParams.slug);
+    }, function () {
+        $scope.sach = BookService.getBookDetail($stateParams.slug);
+    });
+
+    $scope.getTenTheLoais = function () {
+        return $scope.sach.sachThuocTheLoai.map(theLoai => theLoai.tenTheLoai).join(", ");
+    };
+
+    $scope.getTenTacGias = function () {
+        return $scope.sach.sachCuaTacGia.map(tacGia => tacGia.tenTacGia).join(", ");
+    }
+
+    $scope.closeModal = function () {
+        $state.go("^", { inherite: true });
+    };
+
+    $scope.addToCart = function (slug) {
+        CartService.addItem(slug);
+    };
 
 });
 
