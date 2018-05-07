@@ -11,7 +11,9 @@
 <div class="row">
     <div ng-repeat="sach in sachs" class="col-md-4 col-lg-3">
         <div class="card mb-4 box-shadow">
-            <img ng-src="{{sach.anhBia != null ? sach.anhBia : 'http://via.placeholder.com/240x320'}}" alt="thumbnail" width="100%">
+            <a ui-sref="home.book.detail({ slug: sach.slug })">
+                <img ng-src="{{sach.anhBia != null ? sach.anhBia : 'http://via.placeholder.com/240x320'}}" alt="thumbnail" width="100%">
+            </a>
             <div class="card-body text-center">
                 <div class="card-text text-center">
                     {{sach.tenSach}}
