@@ -4,11 +4,14 @@
     </p>
     <div class="cart-body px-2">
         <ul class="list-group mb-3">
-            <li ng-repeat="item in items" class="d-flex justify-content-between lh-condensed list-group-item">
-                <div>
+            <li ng-repeat="item in items" class="d-flex justify-content-between lh-condensed list-group-item pr-0">
+                <div style="width: 70%">
                     <h6 class="my-0">{{item.tenSach}}</h6>
                 </div>
-                <span class="text-muted">{{item.donGiaBan}}</span>
+                <span class="text-muted" style="width: 15%">{{item.donGiaBan}}</span>
+                <button type="button" class="close" data-dismiss="cart" aria-label="Remove" ng-click="removeItem(item.slug)" style="width: 15%">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </li>
 
             <li class="list-group-item d-flex justify-content-between">
@@ -17,8 +20,8 @@
             </li>
         </ul>
     </div>
-    <div class="alert alert-success" role="alert" ng-show="success">Đã đặt hàng thành công</div>
+    <div class="alert alert-success rounded-0 m-0" role="alert" ng-show="success">Đã đặt hàng thành công</div>
     <div class="cart-footer">
-        <button class="btn btn-lg btn-block btn-primary rounded-0" ng-click="sendCart()">Đặt hàng</button>
+        <button class="btn btn-lg btn-block btn-primary rounded-0" ng-click="sendCart()" ng-disabled="isCartEmpty()">Đặt hàng</button>
     </div>
 </div>

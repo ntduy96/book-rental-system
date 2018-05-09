@@ -1,6 +1,6 @@
 app.service("UserService", function ($http) {
 
-    var user = {};
+    var user = null;
 
     this.getUser = function () {
         return user;
@@ -9,7 +9,9 @@ app.service("UserService", function ($http) {
     this.fetchUser = function () {
         $http.get("/api/nguoidung/me")
             .then(function (response) {
-                user = response.data;
+                if (response.data.hasOwnProperty("maNguoiDung")) {
+                    user = response.data;
+                }
             });
     };
 

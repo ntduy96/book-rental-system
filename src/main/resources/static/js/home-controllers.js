@@ -42,15 +42,19 @@ app.controller("bookCtrl", function ($scope, $state, UserService, BookService, C
             BookService.searchBooks(tenSach)
                 .then(function (response) {
                     $scope.sachs = response.data;
-                })
+                });
         } else {
             $scope.sachs = BookService.getBooks();
         }
-    }
+    };
+
+    $scope.isLoggedIn = function () {
+        return UserService.getUser() !== null;
+    };
 
 });
 
-app.controller("bookDetailCtrl", function ($scope, $stateParams, $state, BookService, CartService) {
+app.controller("bookDetailCtrl", function ($scope, $stateParams, $state, BookService, CartService, UserService) {
     
     $scope.sach = {};
 
@@ -66,7 +70,7 @@ app.controller("bookDetailCtrl", function ($scope, $stateParams, $state, BookSer
 
     $scope.getTenTacGias = function () {
         return $scope.sach.sachCuaTacGia.map(tacGia => tacGia.tenTacGia).join(", ");
-    }
+    };
 
     $scope.closeModal = function () {
         $state.go("^", { inherite: true });
@@ -74,6 +78,10 @@ app.controller("bookDetailCtrl", function ($scope, $stateParams, $state, BookSer
 
     $scope.addToCart = function (slug) {
         CartService.addItem(slug);
+    };
+
+    $scope.isLoggedIn = function () {
+        return UserService.getUser() !== null;
     };
 
 });
@@ -92,6 +100,14 @@ app.controller("cartCtrl", function ($scope, CartService, BookService) {
         console.log($scope.items);
     });
 
+    $scope.isCartEmpty = function () {
+        return $scope.items.length === 0;
+    };
+
+    $scope.removeItem = function (slug) {
+        CartService.removeItem(slug);
+    };
+
     $scope.getTotal = function () {
         var total = 0;
         $scope.items.forEach(item => total+=item.donGiaBan);
@@ -106,6 +122,6 @@ app.controller("cartCtrl", function ($scope, CartService, BookService) {
             }).catch(function () {
                 $scope.success = false;
             });
-    }
+    };
 
 });
